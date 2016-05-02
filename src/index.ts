@@ -4,9 +4,6 @@
   /*
    * Interfaces
    */
-  interface Window {
-    gay: any;
-  }
 
   interface RouteOptions {
     templateUrl: string;
