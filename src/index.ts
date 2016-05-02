@@ -3,7 +3,6 @@
 ;(function() {
 
   var noop = function() { return null; }
-  var routes: Array<Route> = [];
 
   interface RouteOptions {
     templateUrl: string;
@@ -25,10 +24,14 @@
   class LocationWatcher {
     private location;
     private history;
+    private routes: Array<Route>;
     private rootElement;
 
     constructor() {
       var self = this;
+
+      self.history = window.history;
+      self.location = window.location;
 
       self.registerListeners();
     }
@@ -37,8 +40,6 @@
       var self = this;
 
       window.addEventListener('load', () => {
-        self.history = window.history;
-        self.location = window.location;
         self.rootElement = document.querySelector('.jsroute-view');
 
         self.preventRootClick();
@@ -69,18 +70,14 @@
     var watcher = new LocationWatcher();
 
     watcher.onChange(function(ev) {
-      console.log(ev);
       ev.preventDefault();
     });
-
-    history.pushState({ foo: 'bar' }, "page2", "index.html");
-    window.onpopstate = function(ev) {
-      console.log(ev);
-    }
 
     function when(path: string, options: RouteOptions) {
       routes.push(new Route(path, options));
     }
+
+    jsRoute.when = when;
 
     return jsRoute;
   }
