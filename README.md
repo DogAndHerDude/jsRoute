@@ -20,5 +20,5 @@ It's still work in progress. No actual functions are yet usable
 
 ## TODO
 
-1. Fix minification & dependenciy injection
+1. Fix minification & dependenciy injection || `done`
 2. Write tests
