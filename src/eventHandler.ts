@@ -1,13 +1,18 @@
 "use strict";
 
-function broadcastEvent(eventName: string, eventData: any): void {
-  var _event = new Event(eventName, eventData);
+import * as tools from "./util";
 
-  window.dispatchEvent(_event);
+function broadcastEvent(eventElement: any, eventName: string, eventData: any): void {
+  var _event = new Event(eventName, eventData);
+  var element = eventElement;
+
+  element.dispatchEvent(_event);
 }
 
-function onEvent(eventName: string, callback: () => void): void {
+function onEvent(eventName: string, eventElement: any, callback): void {
+  var cb = callback || tools.noop;
 
+  eventElement.addEventListener(eventName, cb, false);
 }
 
 export { broadcastEvent };

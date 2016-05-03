@@ -1,6 +1,7 @@
 "use strict";
 
 import * as routeModel from "./route.model";
+import * as eventHandler from "./eventHandler";
 
 export class LocationWatcher {
   private location;
@@ -20,25 +21,26 @@ export class LocationWatcher {
   private registerListeners(): void {
     var self = this;
 
-    window.addEventListener('load', () => {
+    eventHandler.onEvent('load', window, () => {
       self.rootElement = document.querySelector('.jsroute-view');
 
       self.preventRootClick();
-    }, false);
+    });
   }
 
   private preventRootClick(): void {
     var self = this;
 
-    self.rootElement.addEventListener('click', (ev) => {
+    eventHandler.onEvent('click', self.rootElement, (ev) => {
       if(ev.target.nodeName === "A") {
+        console.log(ev);
         ev.preventDefault();
       }
-    }, false);
+    });
   }
 
-  private broadcastEvent(eventName:string, eventData): void {
-    var ev = new Event(eventName);
+  private urlChangeEvent() {
+
   }
 
   public onChange(callback): void {

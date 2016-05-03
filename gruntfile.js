@@ -13,17 +13,34 @@ module.exports = function(grunt) {
     ts: {
       default: {
         options: {
-          mapRoot: "./tmp/maps"
+          mapRoot: "./tmp/maps",
+          module: "AMD",
+          moduleResolution: "node"
         },
         src: ["./src/*.ts"],
         outDir: ".tmp"
       }
     },
 
+    requirejs: {
+      compile: {
+        options: {
+          baseUrl: '.tmp',
+          name: "../node_modules/almond/almond",
+          deps: ["index"],
+          insertRequire: ["index"],
+          findNestedDependencies: true,
+          out: 'dist/jsRoute.js',
+          wrap: true,
+          optimize: 'none'
+        }
+      }
+    },
+
     uglify: {
       target: {
         files: {
-          "dist/jsRoute.min.js": [".tmp/*.js", "!.baseDir.js"]
+          "dist/jsRoute.min.js": ["dist/jsRoute.js"]
         }
       }
     }
@@ -32,10 +49,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-ts");
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-uglify");
+  grunt.loadNpmTasks("grunt-contrib-requirejs");
 
   grunt.registerTask("build", [
     "clean",
     "ts",
+    "requirejs",
     "uglify"
   ]);
 
