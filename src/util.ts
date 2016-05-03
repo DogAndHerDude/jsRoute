@@ -1,7 +1,7 @@
 "use strict";
 
-function noop() {
+var urlRegex: any = "";
 
-}
+function noop() {}
 
 export { noop };

@@ -443,8 +443,8 @@ define('route.model',["require", "exports"], function (require, exports) {
 //# sourceMappingURL=../src/tmp/maps/route.model.js.map;
 define('util',["require", "exports"], function (require, exports) {
     "use strict";
-    function noop() {
-    }
+    var urlRegex = "";
+    function noop() { }
     exports.noop = noop;
 });
 //# sourceMappingURL=../src/tmp/maps/util.js.map;
@@ -463,53 +463,46 @@ define('eventHandler',["require", "exports", "./util"], function (require, expor
     exports.onEvent = onEvent;
 });
 //# sourceMappingURL=../src/tmp/maps/eventHandler.js.map;
-define('locationWatcher',["require", "exports", "./route.model", "./eventHandler"], function (require, exports, routeModel, eventHandler) {
+define('router',["require", "exports", "./route.model", "./eventHandler"], function (require, exports, routeModel, eventHandler) {
     "use strict";
-    var LocationWatcher = (function () {
-        function LocationWatcher() {
+    var Router = (function () {
+        function Router() {
             var self = this;
             self.history = window.history;
             self.location = window.location;
             self.registerListeners();
         }
-        LocationWatcher.prototype.registerListeners = function () {
+        Router.prototype.registerListeners = function () {
             var self = this;
-            eventHandler.onEvent('load', window, function () {
-                self.rootElement = document.querySelector('.jsroute-view');
-                self.preventRootClick();
-            });
+            self.rootElement = document.querySelector('.jsroute-view');
+            self.interceptLinks();
         };
-        LocationWatcher.prototype.preventRootClick = function () {
+        Router.prototype.interceptLinks = function () {
             var self = this;
             eventHandler.onEvent('click', self.rootElement, function (ev) {
                 if (ev.target.nodeName === "A") {
-                    console.log(ev);
                     ev.preventDefault();
+                    console.log(ev.target.href);
+                    console.log(self.location);
                 }
             });
         };
-        LocationWatcher.prototype.urlChangeEvent = function () {
+        Router.prototype.handleRoute = function () {
         };
-        LocationWatcher.prototype.onChange = function (callback) {
-            var self = this;
-        };
-        LocationWatcher.prototype.registerPath = function (path, options) {
+        Router.prototype.registerPath = function (path, options) {
             var self = this;
             self.routes.push(new routeModel.Route(path, options));
         };
-        return LocationWatcher;
+        return Router;
     }());
-    exports.LocationWatcher = LocationWatcher;
+    exports.Router = Router;
 });
-//# sourceMappingURL=../src/tmp/maps/locationWatcher.js.map;
-define('index',["require", "exports", "./locationWatcher"], function (require, exports, locationWatcher_1) {
+//# sourceMappingURL=../src/tmp/maps/router.js.map;
+define('index',["require", "exports", "./router"], function (require, exports, router_1) {
     "use strict";
     function run() {
         var jsRoute = {};
-        var watcher = new locationWatcher_1.LocationWatcher();
-        watcher.onChange(function (ev) {
-            ev.preventDefault();
-        });
+        var watcher = new router_1.Router();
         function when(path, options) {
             watcher.registerPath(path, options);
         }
@@ -517,7 +510,7 @@ define('index',["require", "exports", "./locationWatcher"], function (require, e
         return jsRoute;
     }
     var jsRoute = run();
-    window['jsRoute'] = window['jsRoute'] || jsRoute;
+    window.jsRoute = window.jsRoute || jsRoute;
 });
 //# sourceMappingURL=../src/tmp/maps/index.js.map;
 

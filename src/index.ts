@@ -1,7 +1,7 @@
 "use strict";
 
 import * as routeModel from "./route.model";
-import { LocationWatcher } from "./locationWatcher";
+import { Router } from "./router";
 
 interface JSRoute {
   when(path: string, options: routeModel.RouteOptions): void;
@@ -9,11 +9,7 @@ interface JSRoute {
 
 function run() {
   var jsRoute = <JSRoute>{};
-  var watcher = new LocationWatcher();
-
-  watcher.onChange(function(ev) {
-    ev.preventDefault();
-  });
+  var watcher = new Router();
 
   function when(path: string, options: routeModel.RouteOptions): void {
     watcher.registerPath(path, options);
@@ -26,4 +22,4 @@ function run() {
 
 let jsRoute = run();
 
-window['jsRoute'] = window['jsRoute'] || jsRoute;
+(<any>window).jsRoute = (<any>window).jsRoute || jsRoute;

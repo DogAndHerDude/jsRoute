@@ -3,7 +3,7 @@
 import * as routeModel from "./route.model";
 import * as eventHandler from "./eventHandler";
 
-export class LocationWatcher {
+export class Router {
   private location;
   private history;
   private routes: Array<routeModel.Route>;
@@ -21,30 +21,25 @@ export class LocationWatcher {
   private registerListeners(): void {
     var self = this;
 
-    eventHandler.onEvent('load', window, () => {
-      self.rootElement = document.querySelector('.jsroute-view');
+    self.rootElement = document.querySelector('.jsroute-view');
 
-      self.preventRootClick();
-    });
+    self.interceptLinks();
   }
 
-  private preventRootClick(): void {
+  private interceptLinks(): void {
     var self = this;
 
     eventHandler.onEvent('click', self.rootElement, (ev) => {
       if(ev.target.nodeName === "A") {
-        console.log(ev);
         ev.preventDefault();
+        console.log(ev.target.href);
+        console.log(self.location);
       }
     });
   }
 
-  private urlChangeEvent() {
-
-  }
-
-  public onChange(callback): void {
-    var self = this;
+  private handleRoute(): void {
+    
   }
 
   public registerPath(path: string, options: routeModel.RouteOptions): void {
