@@ -441,19 +441,18 @@ define('route.model',["require", "exports"], function (require, exports) {
     exports.Route = Route;
 });
 //# sourceMappingURL=../src/tmp/maps/route.model.js.map;
-define('util',["require", "exports"], function (require, exports) {
+define('utils',["require", "exports"], function (require, exports) {
     "use strict";
     var urlRegex = "";
     function noop() { }
     exports.noop = noop;
 });
-//# sourceMappingURL=../src/tmp/maps/util.js.map;
-define('eventHandler',["require", "exports", "./util"], function (require, exports, tools) {
+//# sourceMappingURL=../src/tmp/maps/utils.js.map;
+define('eventHandler',["require", "exports", "./utils"], function (require, exports, tools) {
     "use strict";
-    function broadcastEvent(eventElement, eventName, eventData) {
+    function broadcastEvent(eventName, eventElement, eventData) {
         var _event = new Event(eventName, eventData);
-        var element = eventElement;
-        element.dispatchEvent(_event);
+        eventElement.dispatchEvent(_event);
     }
     exports.broadcastEvent = broadcastEvent;
     function onEvent(eventName, eventElement, callback) {
@@ -470,11 +469,11 @@ define('router',["require", "exports", "./route.model", "./eventHandler"], funct
             var self = this;
             self.history = window.history;
             self.location = window.location;
+            self.rootElement = document.querySelector('.jsroute-view');
             self.registerListeners();
         }
         Router.prototype.registerListeners = function () {
             var self = this;
-            self.rootElement = document.querySelector('.jsroute-view');
             self.interceptLinks();
         };
         Router.prototype.interceptLinks = function () {
@@ -489,7 +488,9 @@ define('router',["require", "exports", "./route.model", "./eventHandler"], funct
         };
         Router.prototype.handleRoute = function () {
         };
-        Router.prototype.registerPath = function (path, options) {
+        Router.prototype.matchRoute = function () {
+        };
+        Router.prototype.registerRoute = function (path, options) {
             var self = this;
             self.routes.push(new routeModel.Route(path, options));
         };
@@ -502,9 +503,9 @@ define('index',["require", "exports", "./router"], function (require, exports, r
     "use strict";
     function run() {
         var jsRoute = {};
-        var watcher = new router_1.Router();
+        var router = new router_1.Router();
         function when(path, options) {
-            watcher.registerPath(path, options);
+            router.registerRoute(path, options);
         }
         jsRoute.when = when;
         return jsRoute;

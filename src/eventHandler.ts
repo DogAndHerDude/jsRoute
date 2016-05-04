@@ -1,12 +1,11 @@
 "use strict";
 
-import * as tools from "./util";
+import * as tools from "./utils";
 
-function broadcastEvent(eventElement: any, eventName: string, eventData: any): void {
+function broadcastEvent(eventName: string, eventElement: any, eventData: any): void {
   var _event = new Event(eventName, eventData);
-  var element = eventElement;
 
-  element.dispatchEvent(_event);
+  eventElement.dispatchEvent(_event);
 }
 
 function onEvent(eventName: string, eventElement: any, callback): void {

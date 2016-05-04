@@ -4,24 +4,23 @@ import * as routeModel from "./route.model";
 import * as eventHandler from "./eventHandler";
 
 export class Router {
-  private location;
-  private history;
+  private location: Object;
+  private history: Object;
   private routes: Array<routeModel.Route>;
-  private rootElement;
+  private rootElement: Object;
 
   constructor() {
     var self = this;
 
     self.history = window.history;
     self.location = window.location;
+    self.rootElement = document.querySelector('.jsroute-view');
 
     self.registerListeners();
   }
 
   private registerListeners(): void {
     var self = this;
-
-    self.rootElement = document.querySelector('.jsroute-view');
 
     self.interceptLinks();
   }
@@ -39,10 +38,14 @@ export class Router {
   }
 
   private handleRoute(): void {
-    
+
   }
 
-  public registerPath(path: string, options: routeModel.RouteOptions): void {
+  private matchRoute(): void {
+
+  }
+
+  public registerRoute(path: string, options: routeModel.RouteOptions): void {
     var self = this;
 
     self.routes.push(new routeModel.Route(path, options));

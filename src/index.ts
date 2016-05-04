@@ -9,10 +9,10 @@ interface JSRoute {
 
 function run() {
   var jsRoute = <JSRoute>{};
-  var watcher = new Router();
+  var router = new Router();
 
   function when(path: string, options: routeModel.RouteOptions): void {
-    watcher.registerPath(path, options);
+    router.registerRoute(path, options);
   }
 
   jsRoute.when = when;

@@ -1,11 +1,12 @@
 "use strict";
 
-export interface RouteOptions {
+interface RouteOptions {
   templateUrl: string;
-  //onLoad(): void;
+  template: string;
+  onLoad(callback: (location: Object) => void): void;
 }
 
-export class Route {
+class Route {
   public path: string;
   public options: RouteOptions;
 
@@ -16,3 +17,6 @@ export class Route {
     self.options = options;
   }
 }
+
+export { RouteOptions };
+export { Route };
