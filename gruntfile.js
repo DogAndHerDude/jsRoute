@@ -1,39 +1,50 @@
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
-  
+
   require('time-grunt')(grunt);
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON("package.json"),
+    pkg: grunt.file.readJSON('package.json'),
 
     clean: {
       build: {
-        src: [".tmp", ".dist"]
+        src: ['.tmp', '.dist']
       }
     },
 
     ts: {
       default: {
         options: {
-          mapRoot: "./tmp/maps",
-          module: "AMD",
-          moduleResolution: "node"
+          mapRoot: './tmp/maps',
+          module: 'AMD',
+          moduleResolution: 'node'
         },
-        src: ["./src/*.ts"],
-        outDir: ".tmp"
+        src: ['./src/**/*.ts'],
+        outDir: '.tmp'
       }
     },
 
     requirejs: {
-      compile: {
+      AMDIncluded: {
         options: {
           baseUrl: '.tmp',
-          name: "../node_modules/almond/almond",
-          deps: ["index"],
-          insertRequire: ["index"],
+          name: '../node_modules/almond/almond',
+          deps: ['index'],
+          insertRequire: ['index'],
           findNestedDependencies: true,
           out: 'dist/jsRoute.js',
+          wrap: true,
+          optimize: 'none'
+        }
+      },
+      NoAMD: {
+        options: {
+          baseUrl: '.tmp',
+          include: 'index',
+          insertRequire: ['index'],
+          findNestedDependencies: true,
+          out: 'dist/jsRoute.noamd.js',
           wrap: true,
           optimize: 'none'
         }
@@ -43,25 +54,28 @@ module.exports = function(grunt) {
     uglify: {
       target: {
         files: {
-          "dist/jsRoute.min.js": ["dist/jsRoute.js"]
+          'dist/jsRoute.min.js': ['dist/jsRoute.js'],
+          'dist/jsRoute.noamd.min.js': ['dist/jsRoute.noamd.js']
         }
       }
     }
   });
 
-  grunt.loadNpmTasks("grunt-ts");
-  grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-contrib-uglify");
-  grunt.loadNpmTasks("grunt-contrib-requirejs");
+  grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-  grunt.registerTask("build", [
-    "clean",
-    "ts",
-    "requirejs",
-    "uglify"
+  grunt.registerTask('mergeAMD', ['requirejs:AMDIncluded', 'requirejs:NoAMD']);
+
+  grunt.registerTask('build', [
+    'clean',
+    'ts',
+    'mergeAMD',
+    'uglify'
   ]);
 
-  grunt.registerTask("default", [
-    "build"
+  grunt.registerTask('default', [
+    'build'
   ])
 };
