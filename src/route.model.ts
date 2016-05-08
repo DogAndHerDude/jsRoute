@@ -4,6 +4,7 @@ interface RouteOptions {
   templateUrl: string;
   template: string;
   onLoad(callback: (location: Object) => void): void;
+  matchRoute(route: Object): void;
 }
 
 class Route {
@@ -15,6 +16,10 @@ class Route {
 
     self.path = path;
     self.options = options;
+  }
+
+  public matchRoute(route: string): void {
+    
   }
 }
 

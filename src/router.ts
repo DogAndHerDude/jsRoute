@@ -1,53 +1,26 @@
 "use strict";
 
-import * as routeModel from "./route.model";
-import * as eventHandler from "./eventHandler";
+import * as events from "./router.events";
+import * as observer from "./route.observer";
+import { Route } from "./route.model";
+import { RouteOptions } from "./route.model";
 
 export class Router {
   private location: Object;
   private history: Object;
-  private routes: Array<routeModel.Route>;
-  private rootElement: Object;
 
   constructor() {
     var self = this;
 
     self.history = window.history;
     self.location = window.location;
-    self.rootElement = document.querySelector('.jsroute-view');
 
-    self.registerListeners();
+    events.register();
   }
 
-  private registerListeners(): void {
-    var self = this;
+  public registerRoute(path: string, options: RouteOptions): void {
+    let route = new Route(path, options);
 
-    self.interceptLinks();
-  }
-
-  private interceptLinks(): void {
-    var self = this;
-
-    eventHandler.onEvent('click', self.rootElement, (ev) => {
-      if(ev.target.nodeName === "A") {
-        ev.preventDefault();
-        console.log(ev.target.href);
-        console.log(self.location);
-      }
-    });
-  }
-
-  private handleRoute(): void {
-
-  }
-
-  private matchRoute(): void {
-
-  }
-
-  public registerRoute(path: string, options: routeModel.RouteOptions): void {
-    var self = this;
-
-    self.routes.push(new routeModel.Route(path, options));
+    observer.addRoute(route);
   }
 }
