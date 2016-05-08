@@ -1,25 +1,7 @@
 "use strict";
 
-import * as routeModel from "./route.model";
-import { Router } from "./router";
+import { Router } from "./router/router";
 
-interface JSRoute {
-  when(path: string, options: routeModel.RouteOptions): void;
-}
+let jsRoute = Router;
 
-function run() {
-  var jsRoute = <JSRoute>{};
-  var router = new Router();
-
-  function when(path: string, options: routeModel.RouteOptions): void {
-    router.registerRoute(path, options);
-  }
-
-  jsRoute.when = when;
-
-  return jsRoute;
-}
-
-let jsRoute = run();
-
-(<any>window).jsRoute = (<any>window).jsRoute || jsRoute;
+(<any>window).JSRoute = (<any>window).JSRoute || jsRoute;

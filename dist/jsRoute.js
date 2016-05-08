@@ -428,16 +428,20 @@ var requirejs, require, define;
 
 define("../node_modules/almond/almond", function(){});
 
-define('utils',["require", "exports"], function (require, exports) {
+define('utils/utils',["require", "exports"], function (require, exports) {
     "use strict";
     var urlRegex = "";
-    var rootElement = document.querySelector('.jsroute-view');
+    var rootElement;
     exports.rootElement = rootElement;
     function noop() { }
     exports.noop = noop;
+    function setRoot(selector) {
+        rootElement = document.querySelector(selector);
+    }
+    exports.setRoot = setRoot;
 });
-//# sourceMappingURL=../src/tmp/maps/utils.js.map;
-define('eventHandler',["require", "exports", "./utils"], function (require, exports, tools) {
+//# sourceMappingURL=../../src/tmp/maps/utils/utils.js.map;
+define('events/eventHandler',["require", "exports", "../utils/utils"], function (require, exports, tools) {
     "use strict";
     function broadcastEvent(eventName, eventElement, eventData) {
         var args = [].slice.call(arguments);
@@ -480,8 +484,8 @@ define('eventHandler',["require", "exports", "./utils"], function (require, expo
     }
     exports.onEvent = onEvent;
 });
-//# sourceMappingURL=../src/tmp/maps/eventHandler.js.map;
-define('location.model',["require", "exports"], function (require, exports) {
+//# sourceMappingURL=../../src/tmp/maps/events/eventHandler.js.map;
+define('location/location.model',["require", "exports"], function (require, exports) {
     "use strict";
     var _Location = (function () {
         function _Location(url) {
@@ -493,8 +497,8 @@ define('location.model',["require", "exports"], function (require, exports) {
     }());
     exports._Location = _Location;
 });
-//# sourceMappingURL=../src/tmp/maps/location.model.js.map;
-define('router.events',["require", "exports", "./eventHandler", "./location.model", "./utils"], function (require, exports, eventHandler, location_model_1, utils) {
+//# sourceMappingURL=../../src/tmp/maps/location/location.model.js.map;
+define('router/router.events',["require", "exports", "../events/eventHandler", "../location/location.model", "../utils/utils"], function (require, exports, eventHandler, location_model_1, utils) {
     "use strict";
     function startRouteChange(location) {
         eventHandler.broadcastEvent("routeChange", window, location);
@@ -514,8 +518,8 @@ define('router.events',["require", "exports", "./eventHandler", "./location.mode
     }
     exports.register = register;
 });
-//# sourceMappingURL=../src/tmp/maps/router.events.js.map;
-define('route.observer',["require", "exports"], function (require, exports) {
+//# sourceMappingURL=../../src/tmp/maps/router/router.events.js.map;
+define('route/route.observer',["require", "exports"], function (require, exports) {
     "use strict";
     var routes = [];
     function addRoute(route) {
@@ -526,8 +530,8 @@ define('route.observer',["require", "exports"], function (require, exports) {
     }
     exports.start = start;
 });
-//# sourceMappingURL=../src/tmp/maps/route.observer.js.map;
-define('route.model',["require", "exports"], function (require, exports) {
+//# sourceMappingURL=../../src/tmp/maps/route/route.observer.js.map;
+define('route/route.model',["require", "exports"], function (require, exports) {
     "use strict";
     var Route = (function () {
         function Route(path, options) {
@@ -541,38 +545,29 @@ define('route.model',["require", "exports"], function (require, exports) {
     }());
     exports.Route = Route;
 });
-//# sourceMappingURL=../src/tmp/maps/route.model.js.map;
-define('router',["require", "exports", "./router.events", "./route.observer", "./route.model"], function (require, exports, events, observer, route_model_1) {
+//# sourceMappingURL=../../src/tmp/maps/route/route.model.js.map;
+define('router/router',["require", "exports", "./router.events", "../route/route.observer", "../route/route.model", "../utils/utils"], function (require, exports, events, observer, route_model_1, utils_1) {
     "use strict";
     var Router = (function () {
-        function Router() {
-            var self = this;
-            self.history = window.history;
-            self.location = window.location;
+        function Router(rootElement) {
+            utils_1.setRoot(rootElement);
             events.register();
         }
-        Router.prototype.registerRoute = function (path, options) {
+        Router.prototype.when = function (path, options) {
             var route = new route_model_1.Route(path, options);
             observer.addRoute(route);
+        };
+        Router.prototype.otherwise = function (redirectTo) {
         };
         return Router;
     }());
     exports.Router = Router;
 });
-//# sourceMappingURL=../src/tmp/maps/router.js.map;
-define('index',["require", "exports", "./router"], function (require, exports, router_1) {
+//# sourceMappingURL=../../src/tmp/maps/router/router.js.map;
+define('index',["require", "exports", "./router/router"], function (require, exports, router_1) {
     "use strict";
-    function run() {
-        var jsRoute = {};
-        var router = new router_1.Router();
-        function when(path, options) {
-            router.registerRoute(path, options);
-        }
-        jsRoute.when = when;
-        return jsRoute;
-    }
-    var jsRoute = run();
-    window.jsRoute = window.jsRoute || jsRoute;
+    var jsRoute = router_1.Router;
+    window.JSRoute = window.JSRoute || jsRoute;
 });
 //# sourceMappingURL=../src/tmp/maps/index.js.map;
 

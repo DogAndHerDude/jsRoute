@@ -1,6 +1,6 @@
 "use strict";
 
-import * as tools from "./utils";
+import * as tools from "../utils/utils";
 
 function broadcastEvent(eventName: string, eventElement: any, eventData: any): void {
   var args = [].slice.call(arguments);

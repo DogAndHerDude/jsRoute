@@ -1,8 +1,8 @@
 "use strict";
 
-import * as eventHandler from "./eventHandler";
-import { _Location } from "./location.model";
-import * as utils from "./utils";
+import * as eventHandler from "../events/eventHandler";
+import { _Location } from "../location/location.model";
+import * as utils from "../utils/utils";
 
 
 function startRouteChange(location) {
