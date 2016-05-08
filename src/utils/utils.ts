@@ -1,6 +1,6 @@
 "use strict";
 
-var urlRegex: any = "";
+var urlRegex: string = "";
 var rootElement: Object;
 
 function noop() {}
