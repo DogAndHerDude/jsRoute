@@ -25,10 +25,6 @@ function interceptLinks() {
         return location.path();
       }*/
 
-      eventHandler.onEvent('routeChange', utils.getRoot(), (ev) => {
-        ev.preventDefault();
-      });
-
       // Start route matching
       startRouteChange({next, prev});
     }
