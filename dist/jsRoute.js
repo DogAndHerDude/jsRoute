@@ -468,7 +468,9 @@ define("../node_modules/almond/almond", function(){});
     var utils = require("../utils/utils");
     function broadcastEvent(eventName, eventElement, eventData) {
         var args = [].slice.call(arguments);
-        var _event = new CustomEvent(eventName, eventData);
+        var _event;
+        eventData.cancelable = true;
+        _event = new CustomEvent(eventName, eventData);
         eventElement.dispatchEvent(_event);
     }
     exports.broadcastEvent = broadcastEvent;
@@ -532,6 +534,9 @@ define("../node_modules/almond/almond", function(){});
                 ev.preventDefault();
                 prev = window.location;
                 next = new location_model_1._Location(ev.target.href);
+                eventHandler.onEvent('routeChange', utils.getRoot(), function (ev) {
+                    ev.preventDefault();
+                });
                 startRouteChange({ next: next, prev: prev });
             }
         });
@@ -578,6 +583,7 @@ define("../node_modules/almond/almond", function(){});
     exports.addFallback = addFallback;
     function start() {
         eventHandler.onEvent("routeChange", utils.getRoot(), function (ev) {
+            console.log(ev);
             var nextLocation = ev.detail.next;
             var prevLocation = ev.detail.prev;
             if (nextLocation.host !== prevLocation.host) {

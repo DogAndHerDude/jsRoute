@@ -4,7 +4,11 @@ import * as utils from "../utils/utils";
 
 function broadcastEvent(eventName: string, eventElement, eventData): void {
   var args = [].slice.call(arguments);
-  var _event = new CustomEvent(eventName, eventData);
+  var _event;
+
+  eventData.cancelable = true;
+  
+  _event = new CustomEvent(eventName, eventData);
 
   eventElement.dispatchEvent(_event);
 }

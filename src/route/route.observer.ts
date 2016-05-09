@@ -34,16 +34,18 @@ function addFallback(redirectTo) {
 
 function start() {
   eventHandler.onEvent("routeChange", utils.getRoot(), (ev) => {
-    var nextLocation = ev.detail.next;
-    var prevLocation = ev.detail.prev;
+    if(!ev.defaultPrevented) {
+      var nextLocation = ev.detail.next;
+      var prevLocation = ev.detail.prev;
 
-    if(nextLocation.host !== prevLocation.host) {
-      window.location.assign(nextLocation.href);
+      if(nextLocation.host !== prevLocation.host) {
+        window.location.assign(nextLocation.href);
+      }
+
+      findMatch(nextLocation, (match) => {
+
+      });
     }
-
-    findMatch(nextLocation, (match) => {
-
-    });
   });
 }
 
