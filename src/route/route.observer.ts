@@ -38,10 +38,6 @@ function start() {
       var nextLocation = ev.detail.next;
       var prevLocation = ev.detail.prev;
 
-      if(nextLocation.host !== prevLocation.host) {
-        window.location.assign(nextLocation.href);
-      }
-
       findMatch(nextLocation, (match) => {
 
       });
