@@ -5,18 +5,20 @@ import { _Location } from "../location/location.model";
 import * as utils from "../utils/utils";
 
 function startRouteChange(location) {
-  eventHandler.broadcastEvent("routeChange", utils.getRoot(), location);
+  eventHandler.broadcastEvent("routeChange", utils.getRoot(), { detail: location });
 }
 
 function interceptLinks() {
   eventHandler.onEvent('click', utils.getRoot(), (ev) => {
     if(ev.target.nodeName === "A") {
-      let location;
+      let prev;
+      let next;
 
       ev.preventDefault();
 
+      prev = window.location;
       //Start decosntructing the route and create a new location object out of it
-      location = new _Location(ev.target.href);
+      next = new _Location(ev.target.href);
 
       //If host is not own site : redirect
       /*if() {
@@ -24,7 +26,7 @@ function interceptLinks() {
       }*/
 
       // Start route matching
-      startRouteChange(location);
+      startRouteChange({next, prev});
     }
   });
 

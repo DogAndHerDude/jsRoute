@@ -7,6 +7,10 @@ interface RouteOptions {
   matchRoute(route: Object): void;
 }
 
+interface CallbackInterface {
+  (match: Object): any;
+}
+
 class Route {
   public path: string;
   public options: RouteOptions;
@@ -18,8 +22,11 @@ class Route {
     self.options = options;
   }
 
-  public matchRoute(route: string): void {
-    
+  public matchRoute(splitRoute: Array<string>, callback: CallbackInterface): void {
+    var self = this;
+    var selfSplitRoute = self.path.split('/');
+
+    //Start checking for matches
   }
 }
 

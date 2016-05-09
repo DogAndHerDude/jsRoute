@@ -11,6 +11,13 @@
     <script type="text/javascript">
       window.onload = function() {
         var myRouter = new JSRoute('.jsroute-view');
+
+        myRouter.when('/asssets/:id', {
+          templateUrl: 'url',
+          onLoad: function() {
+            //do something
+          }
+        })
       }
     </script>
   </head>

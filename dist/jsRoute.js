@@ -468,7 +468,7 @@ define("../node_modules/almond/almond", function(){});
     var utils = require("../utils/utils");
     function broadcastEvent(eventName, eventElement, eventData) {
         var args = [].slice.call(arguments);
-        var _event = new Event(eventName, eventData);
+        var _event = new CustomEvent(eventName, eventData);
         eventElement.dispatchEvent(_event);
     }
     exports.broadcastEvent = broadcastEvent;
@@ -486,21 +486,24 @@ define("../node_modules/almond/almond", function(){});
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('location/location.model',["require", "exports", '../utils/utils'], factory);
+        define('location/location.model',["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    var utils = require('../utils/utils');
     var _Location = (function () {
         function _Location(url) {
-            var _url = URL.createObjectURL(url);
-            console.log(_url);
-            this.protocol = url.match(utils.protocolRegex)[0];
-            this.host = url.match(utils.hostRegex)[0];
-            this.path = url.match(utils.pathRegex)[0];
-            this.href = url;
-            console.log(this);
+            var _url = new URL(url);
+            this.hash = _url.hash;
+            this.host = _url.host;
+            this.hostname = _url.hostname;
+            this.href = _url.href;
+            this.origin = _url.origin;
+            this.pathname = _url.pathname;
+            this.protocol = _url.protocol;
+            this.search = _url.search;
         }
+        _Location.prototype.path = function () {
+        };
         return _Location;
     }());
     exports._Location = _Location;
@@ -519,15 +522,17 @@ define("../node_modules/almond/almond", function(){});
     var location_model_1 = require("../location/location.model");
     var utils = require("../utils/utils");
     function startRouteChange(location) {
-        eventHandler.broadcastEvent("routeChange", utils.getRoot(), location);
+        eventHandler.broadcastEvent("routeChange", utils.getRoot(), { detail: location });
     }
     function interceptLinks() {
         eventHandler.onEvent('click', utils.getRoot(), function (ev) {
             if (ev.target.nodeName === "A") {
-                var location_1;
+                var prev = void 0;
+                var next = void 0;
                 ev.preventDefault();
-                location_1 = new location_model_1._Location(ev.target.href);
-                startRouteChange(location_1);
+                prev = window.location;
+                next = new location_model_1._Location(ev.target.href);
+                startRouteChange({ next: next, prev: prev });
             }
         });
     }
@@ -550,6 +555,19 @@ define("../node_modules/almond/almond", function(){});
     var utils = require("../utils/utils");
     var routes = [];
     var fallback;
+    function findMatch(nextLocation, callback) {
+        var nextPathArray = nextLocation.pathname.split('/');
+        console.log(nextPathArray);
+        console.log(routes);
+        for (var i = 0, ii = routes.length; i < ii; i++) {
+            routes[i].matchRoute(nextPathArray, function (match) {
+                if (match) {
+                    return callback(match);
+                }
+            });
+        }
+        return callback();
+    }
     function addRoute(route) {
         routes.push(route);
     }
@@ -560,7 +578,13 @@ define("../node_modules/almond/almond", function(){});
     exports.addFallback = addFallback;
     function start() {
         eventHandler.onEvent("routeChange", utils.getRoot(), function (ev) {
-            console.log(ev);
+            var nextLocation = ev.detail.next;
+            var prevLocation = ev.detail.prev;
+            if (nextLocation.host !== prevLocation.host) {
+                window.location.assign(nextLocation.href);
+            }
+            findMatch(nextLocation, function (match) {
+            });
         });
     }
     exports.start = start;
@@ -581,7 +605,9 @@ define("../node_modules/almond/almond", function(){});
             self.path = path;
             self.options = options;
         }
-        Route.prototype.matchRoute = function (route) {
+        Route.prototype.matchRoute = function (splitRoute, callback) {
+            var self = this;
+            var selfSplitRoute = self.path.split('/');
         };
         return Route;
     }());
