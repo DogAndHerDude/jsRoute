@@ -437,7 +437,12 @@ define("../node_modules/almond/almond", function(){});
     }
 })(function (require, exports) {
     "use strict";
-    var urlRegex = "";
+    var protocolRegex = /\w+:\/\//;
+    exports.protocolRegex = protocolRegex;
+    var hostRegex = /\w+\.\w{1,3}\//;
+    exports.hostRegex = hostRegex;
+    var pathRegex = /\/w+|d+$|\//;
+    exports.pathRegex = pathRegex;
     var rootElement;
     function noop() { }
     exports.noop = noop;
@@ -481,16 +486,21 @@ define("../node_modules/almond/almond", function(){});
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('location/location.model',["require", "exports"], factory);
+        define('location/location.model',["require", "exports", '../utils/utils'], factory);
     }
 })(function (require, exports) {
     "use strict";
+    var utils = require('../utils/utils');
     var _Location = (function () {
         function _Location(url) {
+            var _url = URL.createObjectURL(url);
+            console.log(_url);
+            this.protocol = url.match(utils.protocolRegex)[0];
+            this.host = url.match(utils.hostRegex)[0];
+            this.path = url.match(utils.pathRegex)[0];
             this.href = url;
+            console.log(this);
         }
-        _Location.prototype.path = function () {
-        };
         return _Location;
     }());
     exports._Location = _Location;

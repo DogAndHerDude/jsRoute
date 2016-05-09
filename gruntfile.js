@@ -13,6 +13,18 @@ module.exports = function(grunt) {
       }
     },
 
+    /*tsd: {
+      refresh: {
+        options: {
+          command: 'reinstall',
+          latest: true,
+          options: {
+
+          }
+        }
+      }
+    },*/
+
     ts: {
       default: {
         options: {
@@ -64,6 +76,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-tsd');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-requirejs');

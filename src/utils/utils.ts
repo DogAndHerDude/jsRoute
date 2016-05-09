@@ -1,6 +1,9 @@
 "use strict";
 
-var urlRegex: string = "";
+const protocolRegex = /\w+:\/\//;
+const hostRegex = /\w+\.\w{1,3}\//;
+const pathRegex = /\/w+|d+$|\//;
+
 var rootElement: Object;
 
 function noop() {}
@@ -16,3 +19,7 @@ function getRoot() {
 export { noop };
 export { setRoot };
 export { getRoot };
+
+export { protocolRegex };
+export { hostRegex };
+export { pathRegex };
