@@ -4,7 +4,6 @@ import * as eventHandler from "../events/eventHandler";
 import { _Location } from "../location/location.model";
 import * as utils from "../utils/utils";
 
-
 function startRouteChange(location) {
   eventHandler.broadcastEvent("routeChange", utils.getRoot(), location);
 }

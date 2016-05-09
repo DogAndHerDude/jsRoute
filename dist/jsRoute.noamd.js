@@ -185,12 +185,12 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('index',["require", "exports", "./router/router"], factory);
+        define('index',["require", "exports", './router/router'], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    var router_1 = require("./router/router");
-    var myRouter = new router_1.Router('.jsroute-view');
+    'use strict';
+    var router_1 = require('./router/router');
+    exports.Router = router_1.Router;
 });
 //# sourceMappingURL=../src/tmp/maps/index.js.map;
 

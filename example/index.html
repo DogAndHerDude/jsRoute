@@ -3,7 +3,16 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <!--<script type="text/javascript" src="../dist/jsRoute.js"></script>
+    <script type="text/javascript">
+      console.log(JSRoute);
+    </script>-->
     <script type="text/javascript" src="../dist/jsRoute.js"></script>
+    <script type="text/javascript">
+      window.onload = function() {
+        var myRouter = new JSRoute('.jsroute-view');
+      }
+    </script>
   </head>
   <body class="jsroute-view">
     Hi

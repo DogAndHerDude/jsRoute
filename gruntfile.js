@@ -30,10 +30,13 @@ module.exports = function(grunt) {
           baseUrl: '.tmp',
           name: '../node_modules/almond/almond',
           deps: ['index'],
-          insertRequire: ['index'],
+          //insertRequire: ['index'],
           findNestedDependencies: true,
           out: 'dist/jsRoute.js',
-          wrap: true,
+          wrap: {
+            start: '(function(global) {',
+            end: 'global.JSRoute = global.JSRoute || require("index").Router; }(window));'
+          },
           optimize: 'none'
         }
       },
