@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     clean: {
       build: {
-        src: ['.tmp', '.dist']
+        src: ['.tmp', 'dist']
       }
     },
 
@@ -17,8 +17,7 @@ module.exports = function(grunt) {
       default: {
         options: {
           mapRoot: './tmp/maps',
-          module: 'AMD',
-          moduleResolution: 'node'
+          module: 'umd'
         },
         src: ['./src/**/*.ts'],
         outDir: '.tmp'

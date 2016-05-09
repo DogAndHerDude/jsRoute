@@ -6,12 +6,11 @@ import * as utils from "../utils/utils";
 
 
 function startRouteChange(location) {
-  eventHandler.broadcastEvent("routeChange", window, location);
+  eventHandler.broadcastEvent("routeChange", utils.getRoot(), location);
 }
 
 function interceptLinks() {
-
-  eventHandler.onEvent('click', utils.rootElement, (ev) => {
+  eventHandler.onEvent('click', utils.getRoot(), (ev) => {
     if(ev.target.nodeName === "A") {
       let location;
 

@@ -2,4 +2,4 @@
 
 import { Router } from "./router/router";
 
-(<any>window).JSRoute = (<any>window).JSRoute || Router;
+var myRouter = new Router('.jsroute-view');

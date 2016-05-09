@@ -4,12 +4,13 @@ import * as events from "./router.events";
 import * as observer from "../route/route.observer";
 import { Route } from "../route/route.model";
 import { RouteOptions } from "../route/route.model";
-import { setRoot } from "../utils/utils";
+import * as utils from "../utils/utils";
 
 export class Router {
   constructor(rootElement) {
-    setRoot(rootElement);
+    utils.setRoot(rootElement);
     events.register();
+    observer.start();
   }
 
   public when(path: string, options: RouteOptions): void {
@@ -19,6 +20,6 @@ export class Router {
   }
 
   public otherwise(redirectTo: string): void {
-
+    observer.addFallback(redirectTo);
   }
 }

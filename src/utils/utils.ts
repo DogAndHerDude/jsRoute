@@ -9,6 +9,10 @@ function setRoot(selector) {
   rootElement = document.querySelector(selector);
 }
 
+function getRoot() {
+  return rootElement;
+}
+
 export { noop };
-export { rootElement };
 export { setRoot };
+export { getRoot };
