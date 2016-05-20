@@ -17,6 +17,8 @@ It's still work in progress. No actual functions are yet usable
 
 1. Run `npm install`
 2. Run `grunt` or `grunt build` to build the router
+3. Run `grunt serve` to build the router & start a web server
+4. Server us served on `localhost:8000`
 
 ## TODO
 

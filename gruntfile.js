@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     clean: {
       build: {
-        src: ['.tmp', 'dist']
+        src: ['.tmp', 'dist', 'example/jsRoute.min.js']
       }
     },
 
@@ -72,6 +72,30 @@ module.exports = function(grunt) {
           'dist/jsRoute.noamd.min.js': ['dist/jsRoute.noamd.js']
         }
       }
+    },
+
+    copy: {
+      main: {
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/',
+            src: ['jsRoute.min.js'],
+            dest: 'example/'
+          }
+        ]
+      }
+    },
+
+    connect: {
+      server: {
+        options: {
+          port: 8000,
+          hostname: '*',
+          base: 'example',
+          keepalive: true
+        }
+      }
     }
   });
 
@@ -79,7 +103,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-tsd');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-requirejs')
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   grunt.registerTask('mergeAMD', ['requirejs:AMDIncluded', 'requirejs:NoAMD']);
 
@@ -87,7 +113,13 @@ module.exports = function(grunt) {
     'clean',
     'ts',
     'mergeAMD',
-    'uglify'
+    'uglify',
+    'copy'
+  ]);
+
+  grunt.registerTask('serve', [
+    'build',
+    'connect'
   ]);
 
   grunt.registerTask('default', [

@@ -7,7 +7,7 @@
     <script type="text/javascript">
       console.log(JSRoute);
     </script>-->
-    <script type="text/javascript" src="../dist/jsRoute.js"></script>
+    <script type="text/javascript" src="jsRoute.min.js"></script>
     <script type="text/javascript">
       window.onload = function() {
         var myRouter = new JSRoute('.jsroute-view');
@@ -15,9 +15,9 @@
         myRouter.when('/', {
           templateUrl: 'url',
           onLoad: function() {
-            
+
           }
-        }).when('/asssets/:id', {
+        }).when('/path/to/new/location', {
           templateUrl: 'url',
           onLoad: function() {
             //do something

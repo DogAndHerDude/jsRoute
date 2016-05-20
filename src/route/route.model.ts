@@ -18,7 +18,7 @@ class Route {
     self.options = options;
   }
 
-  public matchRoute(nextPath): boolean {
+  public matchRoute(nextPath: string): boolean {
     var self = this;
     var splitNext = nextPath.split('/');
     var splitRoute = self.path.split('/');
@@ -27,6 +27,8 @@ class Route {
       return true;
     }
     if(splitRoute.length !== splitNext.length) return false;
+    // For debugging only
+    if(nextPath === self.path) return true;
   }
 }
 

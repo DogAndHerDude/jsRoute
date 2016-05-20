@@ -619,6 +619,8 @@ define("../node_modules/almond/almond", function(){});
             }
             if (splitRoute.length !== splitNext.length)
                 return false;
+            if (nextPath === self.path)
+                return true;
         };
         return Route;
     }());
