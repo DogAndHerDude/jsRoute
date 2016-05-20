@@ -40,8 +40,6 @@ function start() {
 
       findMatch(next, (match) => {
         if(!match) return next.path(fallback);
-        console.log('pushing');
-        console.log(next.pathname);
         history.pushState({path: match.path}, 'page', next.pathname);
       });
     }

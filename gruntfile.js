@@ -91,8 +91,10 @@ module.exports = function(grunt) {
       custom: {
         options: {
           port: 8000,
+          hostname: '*',
           bases: 'example',
-          server: path.resolve('./example/server/index.js')
+          server: path.resolve('./example/server/index.js'),
+          open: 'localhost:8000'
         }
       }
     }
