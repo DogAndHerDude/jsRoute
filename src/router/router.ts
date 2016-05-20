@@ -10,7 +10,9 @@ export class Router {
   constructor(rootElement) {
     utils.setRoot(rootElement);
     events.register();
-    observer.start();
+
+    // Needs to register paths first then start the observer
+    // Also needs to fire run method when the page loads so it could serve the base page first
   }
 
   public when(path: string, options: RouteOptions): Object {
@@ -24,6 +26,7 @@ export class Router {
   public otherwise(redirectTo: string): Object {
     observer.addFallback(redirectTo);
 
+    observer.start();
     return this;
   }
 }

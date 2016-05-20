@@ -17,12 +17,22 @@
           onLoad: function() {
 
           }
-        }).when('/path/to/new/location', {
+        }).when('/groups/:group', {
           templateUrl: 'url',
           onLoad: function() {
             //do something
           }
-        });
+        }).when('/group/:id', {
+          templateUrl: 'url',
+          onLoad: function() {
+
+          }
+        }).when('/group', {
+          templateUrl: 'url',
+          onLoad: function() {
+
+          }
+        }).otherwise('/');
       }
     </script>
   </head>
@@ -30,6 +40,9 @@
     Hi
 
     <a href="http://www.google.com/test/path">Google</a>
-    <a href="path/to/new/location">Local</a>
+    <a href="/groups/coolgroup">Match /groups/:group</a>
+    <a href="/group/1555789">Match /group/:id</a>
+    <a href="/group">Match /group</a>
+    <a href="/do/not/match">No match</a>
   </body>
 </html>

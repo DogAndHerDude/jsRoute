@@ -6,6 +6,7 @@ import * as utils from "../utils/utils";
 
 var routes: Array<routeModel.Route> = [];
 var fallback: string = window.location.origin + "/";
+var pageIndex = 0;
 
 function findMatch(next, callback) {
   /*console.log(nextPathArray);
@@ -39,7 +40,9 @@ function start() {
 
       findMatch(next, (match) => {
         if(!match) return next.path(fallback);
-        history.pushState({}, "page", next.pathname);
+        console.log('pushing');
+        console.log(next.pathname);
+        history.pushState({path: match.path}, 'page', next.pathname);
       });
     }
   });

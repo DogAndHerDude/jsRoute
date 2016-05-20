@@ -23,12 +23,17 @@ class Route {
     var splitNext = nextPath.split('/');
     var splitRoute = self.path.split('/');
 
-    if(nextPath === '/' && nextPath === self.path) {
-      return true;
-    }
+    if(nextPath === '/' && nextPath === self.path) return true;
     if(splitRoute.length !== splitNext.length) return false;
-    // For debugging only
-    if(nextPath === self.path) return true;
+
+    for(var i = 1, ii = splitRoute.length; i < ii; i++) {
+      let rgxStr = `${splitNext[i]}|\\:\\w+`;
+      let rgx = new RegExp(rgxStr);
+
+      if(!rgx.test(splitRoute[i])) return false;
+    }
+
+    return true;
   }
 }
 

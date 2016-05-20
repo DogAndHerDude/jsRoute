@@ -561,6 +561,7 @@ define("../node_modules/almond/almond", function(){});
     var utils = require("../utils/utils");
     var routes = [];
     var fallback = window.location.origin + "/";
+    var pageIndex = 0;
     function findMatch(next, callback) {
         for (var i = 0, ii = routes.length; i < ii; i++) {
             if (routes[i].matchRoute(next.pathname)) {
@@ -587,7 +588,9 @@ define("../node_modules/almond/almond", function(){});
                 findMatch(next, function (match) {
                     if (!match)
                         return next.path(fallback);
-                    history.pushState({}, "page", next.pathname);
+                    console.log('pushing');
+                    console.log(next.pathname);
+                    history.pushState({ path: match.path }, 'page', next.pathname);
                 });
             }
         });
@@ -614,13 +617,18 @@ define("../node_modules/almond/almond", function(){});
             var self = this;
             var splitNext = nextPath.split('/');
             var splitRoute = self.path.split('/');
-            if (nextPath === '/' && nextPath === self.path) {
+            var match = true;
+            if (nextPath === '/' && nextPath === self.path)
                 return true;
-            }
             if (splitRoute.length !== splitNext.length)
                 return false;
-            if (nextPath === self.path)
-                return true;
+            for (var i = 1, ii = splitRoute.length; i < ii; i++) {
+                var rgxStr = splitNext[i] + "|\\:\\w+";
+                var rgx = new RegExp(rgxStr);
+                if (!rgx.test(splitRoute[i]))
+                    return false;
+            }
+            return true;
         };
         return Route;
     }());
