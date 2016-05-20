@@ -5,20 +5,16 @@ import * as eventHandler from "../events/eventHandler";
 import * as utils from "../utils/utils";
 
 var routes: Array<routeModel.Route> = [];
-var fallback: string;
+var fallback: string = window.location.origin + "/";
 
-function findMatch(nextLocation, callback) {
-  var nextPathArray = nextLocation.pathname.split('/');
-
-  console.log(nextPathArray);
-  console.log(routes);
+function findMatch(next, callback) {
+  /*console.log(nextPathArray);
+  console.log(routes);*/
 
   for(let i = 0, ii = routes.length; i < ii; i++) {
-    routes[i].matchRoute(nextPathArray, (match) => {
-      if(match) {
-        return callback(match);
-      }
-    });
+    if(routes[i].matchRoute(next.pathname)) {
+        return callback(routes[i]);
+    }
   }
 
   return callback();
@@ -29,17 +25,21 @@ function addRoute(route) {
 }
 
 function addFallback(redirectTo) {
-  fallback = redirectTo;
+  fallback = window.location.origin + redirectTo;
 }
 
 function start() {
   eventHandler.onEvent("routeChange", utils.getRoot(), (ev) => {
     if(!ev.defaultPrevented) {
-      var nextLocation = ev.detail.next;
-      var prevLocation = ev.detail.prev;
+      var next= ev.detail.next;
+      var prev = ev.detail.prev;
 
-      findMatch(nextLocation, (match) => {
+      //If host is not own site : redirect
+      if(next.host !== prev.host) window.location.assign(next.href);
 
+      findMatch(next, (match) => {
+        if(!match) return next.path(fallback);
+        history.pushState({}, "page", next.pathname);
       });
     }
   });

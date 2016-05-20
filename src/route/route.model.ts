@@ -7,10 +7,6 @@ interface RouteOptions {
   matchRoute(route: Object): void;
 }
 
-interface CallbackInterface {
-  (match: Object): any;
-}
-
 class Route {
   public path: string;
   public options: RouteOptions;
@@ -22,11 +18,15 @@ class Route {
     self.options = options;
   }
 
-  public matchRoute(splitRoute: Array<string>, callback: CallbackInterface): void {
+  public matchRoute(nextPath): boolean {
     var self = this;
-    var selfSplitRoute = self.path.split('/');
+    var splitNext = nextPath.split('/');
+    var splitRoute = self.path.split('/');
 
-    //Start checking for matches
+    if(nextPath === '/' && nextPath === self.path) {
+      return true;
+    }
+    if(splitRoute.length !== splitNext.length) return false;
   }
 }
 

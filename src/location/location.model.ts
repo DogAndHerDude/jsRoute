@@ -1,6 +1,8 @@
 "use strict";
 
 import * as utils from '../utils/utils';
+import * as eventHandler from "../events/eventHandler";
+import { startRouteChange } from "../router/router.events";
 
 interface URLConstructor {
     hash: string;
@@ -15,11 +17,13 @@ interface URLConstructor {
     origin: string;
     href: string;
 }
+
 interface URL {
     revokeObjectURL(url: string): void;
     createObjectURL(object: any, options?: ObjectURLOptions): string;
     new(url: string, base?: string): URLConstructor
 }
+
 declare var URL: URL;
 
 interface LocationInterface {
@@ -31,6 +35,7 @@ interface LocationInterface {
   origin: string;
   search: string;
   hostname: string;
+  matchingPath: string;
   path(pathString: string): void;
 }
 
@@ -43,10 +48,16 @@ class _Location implements LocationInterface {
   public origin: string;
   public search: string;
   public hostname: string;
+  public matchingPath: string;
 
   constructor(url: string) {
-    //create new location object out of the given url
+    // Create new location object out of the given url
+    // Change it to own instances instead of copying URL
     var _url = new URL(url);
+
+    //this.origin = url.match(utils.originRegex);
+
+    //console.log(url.match(utils.originRegex));
 
     this.hash = _url.hash;
     this.host = _url.host;
@@ -59,9 +70,16 @@ class _Location implements LocationInterface {
   }
 
   // Redirects to new path
-  public path(): void {
-
+  public path(href): void {
+    startRouteChange(constructRoute(href));
   }
 }
 
-export { _Location };
+function constructRoute(href) {
+  var prev = window.location;
+  var next = new _Location(href);
+
+  return {next, prev};
+}
+
+export { constructRoute };

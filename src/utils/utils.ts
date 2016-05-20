@@ -1,6 +1,6 @@
 "use strict";
 
-const protocolRegex = /\w+:\/\//;
+const originRegex = /\w+:\/\//;
 const hostRegex = /\w+\.\w{1,3}\//;
 const pathRegex = /\/w+|d+$|\//;
 
@@ -20,6 +20,6 @@ export { noop };
 export { setRoot };
 export { getRoot };
 
-export { protocolRegex };
+export { originRegex };
 export { hostRegex };
 export { pathRegex };

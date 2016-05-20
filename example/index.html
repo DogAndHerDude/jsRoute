@@ -12,12 +12,17 @@
       window.onload = function() {
         var myRouter = new JSRoute('.jsroute-view');
 
-        myRouter.when('/asssets/:id', {
+        myRouter.when('/', {
+          templateUrl: 'url',
+          onLoad: function() {
+            
+          }
+        }).when('/asssets/:id', {
           templateUrl: 'url',
           onLoad: function() {
             //do something
           }
-        })
+        });
       }
     </script>
   </head>
