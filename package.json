@@ -13,6 +13,7 @@
   "author": "Dominykas Bartkus",
   "license": "MIT",
   "devDependencies": {
+    "express": "^4.13.4",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-concat": "^1.0.1",
@@ -21,6 +22,7 @@
     "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-express": "^1.4.1",
     "grunt-ts": "^5.5.0-beta.2",
     "grunt-tsd": "^0.1.0",
     "grunt-tslint": "^3.1.0",

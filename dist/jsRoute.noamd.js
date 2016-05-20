@@ -101,6 +101,9 @@
     var eventHandler = require("../events/eventHandler");
     var location_model_1 = require("../location/location.model");
     var utils = require("../utils/utils");
+    function onRun() {
+        startRouteChange(window.location.origin + window.location.pathname);
+    }
     function startRouteChange(location) {
         eventHandler.broadcastEvent("routeChange", utils.getRoot(), { detail: location });
     }
@@ -188,7 +191,6 @@
             var self = this;
             var splitNext = nextPath.split('/');
             var splitRoute = self.path.split('/');
-            var match = true;
             if (nextPath === '/' && nextPath === self.path)
                 return true;
             if (splitRoute.length !== splitNext.length)
@@ -223,7 +225,6 @@
         function Router(rootElement) {
             utils.setRoot(rootElement);
             events.register();
-            observer.start();
         }
         Router.prototype.when = function (path, options) {
             var route = new route_model_1.Route(path, options);
@@ -232,6 +233,7 @@
         };
         Router.prototype.otherwise = function (redirectTo) {
             observer.addFallback(redirectTo);
+            observer.start();
             return this;
         };
         return Router;

@@ -530,6 +530,9 @@ define("../node_modules/almond/almond", function(){});
     var eventHandler = require("../events/eventHandler");
     var location_model_1 = require("../location/location.model");
     var utils = require("../utils/utils");
+    function onRun() {
+        startRouteChange(window.location.origin + window.location.pathname);
+    }
     function startRouteChange(location) {
         eventHandler.broadcastEvent("routeChange", utils.getRoot(), { detail: location });
     }
@@ -617,7 +620,6 @@ define("../node_modules/almond/almond", function(){});
             var self = this;
             var splitNext = nextPath.split('/');
             var splitRoute = self.path.split('/');
-            var match = true;
             if (nextPath === '/' && nextPath === self.path)
                 return true;
             if (splitRoute.length !== splitNext.length)
@@ -652,7 +654,6 @@ define("../node_modules/almond/almond", function(){});
         function Router(rootElement) {
             utils.setRoot(rootElement);
             events.register();
-            observer.start();
         }
         Router.prototype.when = function (path, options) {
             var route = new route_model_1.Route(path, options);
@@ -661,6 +662,7 @@ define("../node_modules/almond/almond", function(){});
         };
         Router.prototype.otherwise = function (redirectTo) {
             observer.addFallback(redirectTo);
+            observer.start();
             return this;
         };
         return Router;

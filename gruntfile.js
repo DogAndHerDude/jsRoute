@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(grunt) {
-
+  var path = require('path');
   require('time-grunt')(grunt);
 
   grunt.initConfig({
@@ -87,13 +87,12 @@ module.exports = function(grunt) {
       }
     },
 
-    connect: {
-      server: {
+    express: {
+      custom: {
         options: {
           port: 8000,
-          hostname: '*',
-          base: 'example',
-          keepalive: true
+          bases: 'example',
+          server: path.resolve('./example/server/index.js')
         }
       }
     }
@@ -106,6 +105,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs')
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-express');
 
   grunt.registerTask('mergeAMD', ['requirejs:AMDIncluded', 'requirejs:NoAMD']);
 
@@ -119,7 +119,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('serve', [
     'build',
-    'connect'
+    'express',
+    'express-keepalive'
   ]);
 
   grunt.registerTask('default', [
