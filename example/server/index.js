@@ -9,7 +9,7 @@ var app = express();
 var server = http.createServer(app);
 
 var config = {
-  port: process.env.PORT || 9000,
+  port: 9000,
   ip: process.env.IP || '0.0.0.0',
   root: path.normalize(__dirname + '/..')
 };
