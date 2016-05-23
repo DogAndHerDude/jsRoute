@@ -1,6 +1,6 @@
 {
   "name": "js-route",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A JavaScript router that loads data and pages based on the current window location",
   "main": "index.js",
   "scripts": {

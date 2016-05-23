@@ -68,23 +68,6 @@
     "use strict";
     var utils = require('../utils/utils');
     var router_events_1 = require("../router/router.events");
-    var _Location = (function () {
-        function _Location(url) {
-            var _url = new URL(url);
-            this.hash = _url.hash;
-            this.host = _url.host;
-            this.hostname = _url.hostname;
-            this.href = _url.href;
-            this.origin = _url.origin;
-            this.pathname = _url.pathname;
-            this.protocol = _url.protocol;
-            this.search = _url.search;
-        }
-        _Location.prototype.path = function (href) {
-            router_events_1.startRouteChange(constructRoute(href));
-        };
-        return _Location;
-    }());
     var $Location = (function () {
         function $Location(url) {
             this.hash = url.match(/^#*\?|$/) || '';
