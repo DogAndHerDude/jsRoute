@@ -87,12 +87,21 @@ module.exports = function(grunt) {
     },
 
     express: {
-      options: {
-        port: 8000
-      },
       dev: {
         options: {
-          server: path.resolve('./example/server/index.js')
+          script: 'example/server/index.js',
+          debug: true
+        }
+      }
+    },
+
+    watch: {
+      express: {
+        files: ['example/server/*.{js,json}'],
+        tasks: ['express:dev', 'wait'],
+        options: {
+          livereload: true,
+          spawn: false
         }
       }
     }
@@ -104,7 +113,19 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-requirejs')
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-express');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-express-server');
+
+  grunt.registerTask('wait', function () {
+    grunt.log.ok('Waiting for server reload...');
+
+    var done = this.async();
+
+    setTimeout(function () {
+      grunt.log.writeln('Done waiting!');
+      done();
+    }, 1500);
+  });
 
   grunt.registerTask('mergeAMD', ['requirejs:AMDIncluded', 'requirejs:NoAMD']);
 
@@ -119,7 +140,8 @@ module.exports = function(grunt) {
   grunt.registerTask('serve', [
     'build',
     'express:dev',
-    'express-keepalive'
+    'watch'
+    //'express-keepalive'
   ]);
 
   grunt.registerTask('default', [
