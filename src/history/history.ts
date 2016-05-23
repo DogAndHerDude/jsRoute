@@ -27,7 +27,6 @@ function push(route, pathname) {
 function monitorBrowserNavigation() {
   window.addEventListener('popstate', (ev) => {
     ev.preventDefault();
-    console.log(ev);
     startRouteChange(constructRoute(ev.state.path));
   });
 }
