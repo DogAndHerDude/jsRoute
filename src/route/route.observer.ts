@@ -24,10 +24,13 @@ function changeCallback(ev) {
     findMatch(next, (match) => {
       if(!match) return next.path(fallback);
       history.pushState({path: match.path}, 'page', next.pathname);
+      next.matchingPath = match.path;
       $http.get(match.options.templateUrl, (err, data) => {
         var view = utils.getView();
 
-        view['innerHTML'] = data;
+        view.innerHTML = data;
+
+        if(match.options.onLoad) match.options.onLoad(view, utils.getRoot(), next);
       });
     });
   }

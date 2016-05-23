@@ -1,4 +1,3 @@
-(function () {
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -91,6 +90,7 @@
         return _Location;
     }());
     function constructRoute(href) {
+        console.log(href);
         var prev = window.location;
         var next = new _Location(href);
         return { next: next, prev: prev };
@@ -111,8 +111,9 @@
     var location_model_1 = require("../location/location.model");
     var utils = require("../utils/utils");
     function onRun() {
-        startRouteChange(window.location.origin + window.location.pathname);
+        startRouteChange(location_model_1.constructRoute(window.location.origin + window.location.pathname));
     }
+    exports.onRun = onRun;
     function startRouteChange(location) {
         eventHandler.broadcastEvent("routeChange", utils.getRoot(), { detail: location });
     }
@@ -192,9 +193,12 @@
                 if (!match)
                     return next.path(fallback);
                 history.pushState({ path: match.path }, 'page', next.pathname);
+                next.matchingPath = match.path;
                 http_1.default.get(match.options.templateUrl, function (err, data) {
                     var view = utils.getView();
-                    view['innerHTML'] = data;
+                    view.innerHTML = data;
+                    if (match.options.onLoad)
+                        match.options.onLoad(view, utils.getRoot(), next);
                 });
             });
         }
@@ -284,6 +288,7 @@
         Router.prototype.otherwise = function (redirectTo) {
             observer.addFallback(redirectTo);
             observer.start();
+            events.onRun();
         };
         return Router;
     }());
@@ -303,6 +308,3 @@
     exports.Router = router_1.Router;
 });
 //# sourceMappingURL=../src/tmp/maps/index.js.map;
-
-require(["index"]);
-}());

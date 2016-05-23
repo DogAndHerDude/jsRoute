@@ -6,7 +6,7 @@ import * as utils from "../utils/utils";
 
 function onRun() {
   // Determine current route and load the template based on it
-  startRouteChange(window.location.origin + window.location.pathname);
+  startRouteChange(constructRoute(window.location.origin + window.location.pathname));
 }
 
 function startRouteChange(location) {
@@ -30,3 +30,4 @@ function register() {
 
 export { register };
 export { startRouteChange };
+export { onRun };

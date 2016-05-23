@@ -28,5 +28,6 @@ export class Router {
     observer.addFallback(redirectTo);
 
     observer.start();
+    events.onRun();
   }
 }

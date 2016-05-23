@@ -4,8 +4,8 @@ const originRegex = /\w+:\/\//;
 const hostRegex = /\w+\.\w{1,3}\//;
 const pathRegex = /\/w+|d+$|\//;
 
-var rootElement: Object;
-var rootView: Object;
+var rootElement;
+var rootView;
 
 function noop() {}
 

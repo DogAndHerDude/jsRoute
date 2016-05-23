@@ -56,10 +56,9 @@ module.exports = function(grunt) {
         options: {
           baseUrl: '.tmp',
           include: 'index',
-          insertRequire: ['index'],
           findNestedDependencies: true,
           out: 'dist/jsRoute.noamd.js',
-          wrap: true,
+          wrap: false,
           optimize: 'none'
         }
       }

@@ -9,14 +9,16 @@
         var myRouter = new JSRoute('.jsroute-view');
 
         myRouter.when('/', {
-          templateUrl: 'url',
+          templateUrl: '/views/main.view.html',
           onLoad: function() {
-
+            console.log('main view loaded');
           }
         }).when('/groups/:group', {
           templateUrl: '/views/group.view.html',
-          onLoad: function() {
-            //do something
+          onLoad: function(view, rootElement, location) {
+            console.log(view);
+            console.log(rootElement);
+            console.log(location);
           }
         }).when('/group/:id', {
           templateUrl: 'url',
