@@ -7,8 +7,9 @@ import { RouteOptions } from "../route/route.model";
 import * as utils from "../utils/utils";
 
 export class Router {
-  constructor(rootElement) {
-    utils.setRoot(rootElement);
+  constructor(view) {
+    utils.setView(view);
+    utils.setRoot();
     events.register();
 
     // Needs to register paths first then start the observer
@@ -23,10 +24,9 @@ export class Router {
     return this;
   }
 
-  public otherwise(redirectTo: string): Object {
+  public otherwise(redirectTo: string): void {
     observer.addFallback(redirectTo);
 
     observer.start();
-    return this;
   }
 }

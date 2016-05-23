@@ -5,11 +5,20 @@ const hostRegex = /\w+\.\w{1,3}\//;
 const pathRegex = /\/w+|d+$|\//;
 
 var rootElement: Object;
+var rootView: Object;
 
 function noop() {}
 
-function setRoot(selector) {
-  rootElement = document.querySelector(selector);
+function setView(selector) {
+  rootView = document.querySelector(selector);
+}
+
+function getView() {
+  return rootView;
+}
+
+function setRoot() {
+  rootElement = document.querySelector('.jsroute-app');
 }
 
 function getRoot() {
@@ -17,6 +26,8 @@ function getRoot() {
 }
 
 export { noop };
+export { setView };
+export { getView };
 export { setRoot };
 export { getRoot };
 

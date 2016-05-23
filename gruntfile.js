@@ -88,13 +88,12 @@ module.exports = function(grunt) {
     },
 
     express: {
-      custom: {
+      options: {
+        port: 8000
+      },
+      dev: {
         options: {
-          port: 8000,
-          hostname: '*',
-          bases: 'example',
-          server: path.resolve('./example/server/index.js'),
-          open: 'localhost:8000'
+          server: path.resolve('./example/server/index.js')
         }
       }
     }
@@ -106,7 +105,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-requirejs')
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-express');
 
   grunt.registerTask('mergeAMD', ['requirejs:AMDIncluded', 'requirejs:NoAMD']);
@@ -121,7 +119,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('serve', [
     'build',
-    'express',
+    'express:dev',
     'express-keepalive'
   ]);
 

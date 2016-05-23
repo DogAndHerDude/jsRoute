@@ -3,10 +3,6 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-    <!--<script type="text/javascript" src="../dist/jsRoute.js"></script>
-    <script type="text/javascript">
-      console.log(JSRoute);
-    </script>-->
     <script type="text/javascript" src="jsRoute.min.js"></script>
     <script type="text/javascript">
       window.onload = function() {
@@ -18,7 +14,7 @@
 
           }
         }).when('/groups/:group', {
-          templateUrl: 'url',
+          templateUrl: '/views/group.view.html',
           onLoad: function() {
             //do something
           }
@@ -28,7 +24,7 @@
 
           }
         }).when('/group', {
-          templateUrl: 'url',
+          templateUrl: '/views/groupSingle.view.html',
           onLoad: function() {
 
           }
@@ -36,13 +32,15 @@
       }
     </script>
   </head>
-  <body class="jsroute-view">
-    Hi
-
+  <body class="jsroute-app">
     <a href="http://www.google.com/test/path">Google</a>
     <a href="/groups/coolgroup">Match /groups/:group</a>
     <a href="/group/1555789">Match /group/:id</a>
     <a href="/group">Match /group</a>
     <a href="/do/not/match">No match</a>
+
+    <div class="jsroute-view">
+
+    </div>
   </body>
 </html>
