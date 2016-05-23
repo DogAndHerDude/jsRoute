@@ -3,6 +3,28 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
+        define('events/eventHandler',["require", "exports"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    function broadcastEvent(eventName, eventData) {
+        var args = [].slice.call(arguments);
+        var _event;
+        eventData.cancelable = true;
+        _event = new CustomEvent(eventName, eventData);
+        this.dispatchEvent(_event);
+    }
+    function extendRoot() {
+        Object.prototype['broadcastEvent'] = broadcastEvent;
+    }
+    exports.extendRoot = extendRoot;
+});
+//# sourceMappingURL=../../src/tmp/maps/events/eventHandler.js.map;
+(function (factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
         define('utils/utils',["require", "exports"], factory);
     }
 })(function (require, exports) {
@@ -35,36 +57,6 @@
     exports.getRoot = getRoot;
 });
 //# sourceMappingURL=../../src/tmp/maps/utils/utils.js.map;
-(function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === 'function' && define.amd) {
-        define('events/eventHandler',["require", "exports", "../utils/utils"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    var utils = require("../utils/utils");
-    function broadcastEvent(eventName, eventData) {
-        var args = [].slice.call(arguments);
-        var _event;
-        eventData.cancelable = true;
-        _event = new CustomEvent(eventName, eventData);
-        this.dispatchEvent(_event);
-    }
-    function onEvent(eventName, eventElement, callback) {
-        var args = [].slice.call(arguments);
-        var cb = callback || utils.noop;
-        var el;
-        eventElement.addEventListener(eventName, cb, false);
-    }
-    exports.onEvent = onEvent;
-    function extendRoot() {
-        Object.prototype['broadcastEvent'] = broadcastEvent;
-    }
-    exports.extendRoot = extendRoot;
-});
-//# sourceMappingURL=../../src/tmp/maps/events/eventHandler.js.map;
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -229,7 +221,6 @@
     function monitorBrowserNavigation() {
         window.addEventListener('popstate', function (ev) {
             ev.preventDefault();
-            console.log(ev);
             router_events_1.startRouteChange(location_model_1.constructRoute(ev.state.path));
         });
     }

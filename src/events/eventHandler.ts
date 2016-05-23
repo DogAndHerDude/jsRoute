@@ -13,17 +13,8 @@ function broadcastEvent(eventName: string, eventData): void {
   this.dispatchEvent(_event);
 }
 
-function onEvent(eventName: string, eventElement, callback): void {
-  var args = [].slice.call(arguments);
-  let cb = callback || utils.noop;
-  let el;
-
-  eventElement.addEventListener(eventName, cb, false);
-}
-
 function extendRoot(): void {
   Object.prototype['broadcastEvent'] = broadcastEvent;
 }
 
-export { onEvent };
 export { extendRoot };
