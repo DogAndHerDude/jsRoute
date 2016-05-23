@@ -10,7 +10,10 @@ var fallback: string = window.location.origin + "/";
 var pageIndex = 0;
 
 function monitorRouteChange() {
-  eventHandler.onEvent("routeChange", utils.getRoot(), changeCallback);
+  var root = utils.getRoot();
+
+  root.addEventListener('routeChange', changeCallback, false);
+  //eventHandler.onEvent("routeChange", utils.getRoot(), changeCallback);
 }
 
 function changeCallback(ev) {

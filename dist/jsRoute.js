@@ -475,14 +475,13 @@ define("../node_modules/almond/almond", function(){});
 })(function (require, exports) {
     "use strict";
     var utils = require("../utils/utils");
-    function broadcastEvent(eventName, eventElement, eventData) {
+    function broadcastEvent(eventName, eventData) {
         var args = [].slice.call(arguments);
         var _event;
         eventData.cancelable = true;
         _event = new CustomEvent(eventName, eventData);
-        eventElement.dispatchEvent(_event);
+        this.dispatchEvent(_event);
     }
-    exports.broadcastEvent = broadcastEvent;
     function onEvent(eventName, eventElement, callback) {
         var args = [].slice.call(arguments);
         var cb = callback || utils.noop;
@@ -490,6 +489,10 @@ define("../node_modules/almond/almond", function(){});
         eventElement.addEventListener(eventName, cb, false);
     }
     exports.onEvent = onEvent;
+    function extendRoot() {
+        Object.prototype['broadcastEvent'] = broadcastEvent;
+    }
+    exports.extendRoot = extendRoot;
 });
 //# sourceMappingURL=../../src/tmp/maps/events/eventHandler.js.map;
 (function (factory) {
@@ -520,7 +523,6 @@ define("../node_modules/almond/almond", function(){});
         return _Location;
     }());
     function constructRoute(href) {
-        console.log(href);
         var prev = window.location;
         var next = new _Location(href);
         return { next: next, prev: prev };
@@ -545,11 +547,13 @@ define("../node_modules/almond/almond", function(){});
     }
     exports.onRun = onRun;
     function startRouteChange(location) {
-        eventHandler.broadcastEvent("routeChange", utils.getRoot(), { detail: location });
+        var root = utils.getRoot();
+        root.broadcastEvent("routeChange", { detail: location });
     }
     exports.startRouteChange = startRouteChange;
     function interceptLinks() {
-        eventHandler.onEvent('click', utils.getRoot(), function (ev) {
+        var root = utils.getRoot();
+        root.addEventListener('click', function (ev) {
             if (ev.target.nodeName === "A") {
                 ev.preventDefault();
                 startRouteChange(location_model_1.constructRoute(ev.target.href));
@@ -557,6 +561,7 @@ define("../node_modules/almond/almond", function(){});
         });
     }
     function register() {
+        eventHandler.extendRoot();
         interceptLinks();
     }
     exports.register = register;
@@ -600,18 +605,18 @@ define("../node_modules/almond/almond", function(){});
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('route/route.observer',["require", "exports", "../events/eventHandler", "../utils/utils", "../http/http"], factory);
+        define('route/route.observer',["require", "exports", "../utils/utils", "../http/http"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    var eventHandler = require("../events/eventHandler");
     var utils = require("../utils/utils");
     var http_1 = require("../http/http");
     var routes = [];
     var fallback = window.location.origin + "/";
     var pageIndex = 0;
     function monitorRouteChange() {
-        eventHandler.onEvent("routeChange", utils.getRoot(), changeCallback);
+        var root = utils.getRoot();
+        root.addEventListener('routeChange', changeCallback, false);
     }
     function changeCallback(ev) {
         if (!ev.defaultPrevented) {

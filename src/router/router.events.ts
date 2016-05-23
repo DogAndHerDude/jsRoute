@@ -10,11 +10,14 @@ function onRun() {
 }
 
 function startRouteChange(location) {
-  eventHandler.broadcastEvent("routeChange", utils.getRoot(), { detail: location });
+  var root = utils.getRoot();
+  root.broadcastEvent("routeChange", { detail: location });
 }
 
 function interceptLinks() {
-  eventHandler.onEvent('click', utils.getRoot(), (ev) => {
+  var root = utils.getRoot();
+
+  root.addEventListener('click', (ev) => {
     if(ev.target.nodeName === "A") {
       ev.preventDefault();
       // Start route matching and change
@@ -25,6 +28,7 @@ function interceptLinks() {
 }
 
 function register() {
+  eventHandler.extendRoot();
   interceptLinks();
 }
 

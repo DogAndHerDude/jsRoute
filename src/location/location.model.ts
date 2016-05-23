@@ -76,7 +76,6 @@ class _Location implements LocationInterface {
 }
 
 function constructRoute(href) {
-  console.log(href);
   var prev = window.location;
   var next = new _Location(href);
 

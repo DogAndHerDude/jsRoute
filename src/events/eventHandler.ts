@@ -2,15 +2,15 @@
 
 import * as utils from "../utils/utils";
 
-function broadcastEvent(eventName: string, eventElement, eventData): void {
+function broadcastEvent(eventName: string, eventData): void {
   var args = [].slice.call(arguments);
   var _event;
 
   eventData.cancelable = true;
-  
+
   _event = new CustomEvent(eventName, eventData);
 
-  eventElement.dispatchEvent(_event);
+  this.dispatchEvent(_event);
 }
 
 function onEvent(eventName: string, eventElement, callback): void {
@@ -21,5 +21,9 @@ function onEvent(eventName: string, eventElement, callback): void {
   eventElement.addEventListener(eventName, cb, false);
 }
 
-export { broadcastEvent };
+function extendRoot(): void {
+  Object.prototype['broadcastEvent'] = broadcastEvent;
+}
+
 export { onEvent };
+export { extendRoot };
