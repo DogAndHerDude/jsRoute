@@ -22,11 +22,6 @@ app.use(morgan('dev'));
 
 app.use(express.static(app.get('appPath')));
 
-app.route('/:url(api|auth|components|app|bower_components|assets)/*')
- .get(function(req, res) {
-   console.log('tis an error');
- });
-
 app.route('/*')
   .get(function(req, res) {
     res.sendFile(path.resolve(app.get('appPath') + '/index.html'));
