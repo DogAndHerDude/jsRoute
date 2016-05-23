@@ -3,6 +3,29 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <script type="text/javascript">
+      /*window.onload = function() {
+        var page = 1;
+        var buttonb = document.querySelector('.buttonb');
+        var buttonf = document.querySelector('.buttonf');
+
+        buttonb.addEventListener('click', function() {
+          page++;
+          history.pushState({data: 'kek'}, 'page' + page, '/page' + page);
+        });
+
+
+        buttonf.addEventListener('click', function() {
+          page--;
+          history.pushState({data: 'kek'}, 'page' + page, '/page' + page);
+        });
+
+        window.addEventListener('popstate', function(ev) {
+          ev.preventDefault();
+          console.log(ev);
+        });
+      }*/
+    </script>
     <script type="text/javascript" src="jsRoute.min.js"></script>
     <script type="text/javascript">
       window.onload = function() {
@@ -11,14 +34,10 @@
         myRouter.when('/', {
           templateUrl: '/views/main.view.html',
           onLoad: function() {
-            console.log('main view loaded');
           }
         }).when('/groups/:group', {
           templateUrl: '/views/group.view.html',
           onLoad: function(view, rootElement, location) {
-            console.log(view);
-            console.log(rootElement);
-            console.log(location);
           }
         }).when('/group/:id', {
           templateUrl: 'url',
@@ -42,7 +61,8 @@
     <a href="/do/not/match">No match</a>
 
     <div class="jsroute-view">
-
+      <button class="buttonb" type="button" name="buttonb">b</button>
+      <button class="buttonf" type="button" name="buttonf">f</button>
     </div>
   </body>
 </html>

@@ -1,7 +1,7 @@
 "use strict";
 
-const originRegex = /\w+:\/\//;
-const hostRegex = /\w+\.\w{1,3}\//;
+const protocolRegex = /\w+\:\/\//;
+const hostRegex = /\w+\.\w{1,4}\//;
 const pathRegex = /\/w+|d+$|\//;
 
 var rootElement;
@@ -31,6 +31,6 @@ export { getView };
 export { setRoot };
 export { getRoot };
 
-export { originRegex };
+export { protocolRegex };
 export { hostRegex };
 export { pathRegex };

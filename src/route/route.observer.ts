@@ -4,6 +4,7 @@ import * as routeModel from "./route.model";
 import * as eventHandler from "../events/eventHandler";
 import * as utils from "../utils/utils";
 import $http from "../http/http";
+import * as $history from '../history/history';
 
 var routes: Array<routeModel.Route> = [];
 var fallback: string = window.location.origin + "/";
@@ -26,7 +27,8 @@ function changeCallback(ev) {
 
     findMatch(next, (match) => {
       if(!match) return next.path(fallback);
-      history.pushState({path: match.path}, 'page', next.pathname);
+      $history.push(match, next.pathname);
+      //history.pushState({path: next.pathname}, 'page', next.pathname);
       next.matchingPath = match.path;
       $http.get(match.options.templateUrl, (err, data) => {
         var view = utils.getView();
@@ -59,6 +61,7 @@ function addFallback(redirectTo) {
 
 function start() {
   monitorRouteChange();
+  $history.monitorBrowserNavigation();
 }
 
 export { start };

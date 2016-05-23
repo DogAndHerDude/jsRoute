@@ -7,9 +7,9 @@
     }
 })(function (require, exports) {
     "use strict";
-    var originRegex = /\w+:\/\//;
-    exports.originRegex = originRegex;
-    var hostRegex = /\w+\.\w{1,3}\//;
+    var protocolRegex = /\w+\:\/\//;
+    exports.protocolRegex = protocolRegex;
+    var hostRegex = /\w+\.\w{1,4}\//;
     exports.hostRegex = hostRegex;
     var pathRegex = /\/w+|d+$|\//;
     exports.pathRegex = pathRegex;
@@ -70,10 +70,11 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('location/location.model',["require", "exports", "../router/router.events"], factory);
+        define('location/location.model',["require", "exports", '../utils/utils', "../router/router.events"], factory);
     }
 })(function (require, exports) {
     "use strict";
+    var utils = require('../utils/utils');
     var router_events_1 = require("../router/router.events");
     var _Location = (function () {
         function _Location(url) {
@@ -92,9 +93,34 @@
         };
         return _Location;
     }());
+    var $Location = (function () {
+        function $Location(url) {
+            this.hash = url.match(/^#*\?|$/) || '';
+            this.host = url.match(utils.hostRegex) || window.location.host;
+            if (typeof this.host === 'object') {
+                this.host = this.protocol[0];
+            }
+            this.hostname = this.host.match(/\w+/)[0];
+            this.protocol = url.match(utils.protocolRegex) || window.location.protocol;
+            if (typeof this.protocol === 'object') {
+                this.protocol = this.protocol[0];
+                this.protocol = this.protocol.replace('//', '');
+            }
+            this.origin = this.protocol + "//" + this.host;
+            this.pathname = url.replace(this.protocol + '//', '').replace(this.host, '');
+            this.search = url.match(/^\?*$/) || '';
+            this.href = "" + this.origin + this.pathname;
+            this.matchingPath = '';
+        }
+        $Location.prototype.path = function (href) {
+            router_events_1.startRouteChange(constructRoute(href));
+        };
+        return $Location;
+    }());
+    exports.$Location = $Location;
     function constructRoute(href) {
         var prev = window.location;
-        var next = new _Location(href);
+        var next = new $Location(href);
         return { next: next, prev: prev };
     }
     exports.constructRoute = constructRoute;
@@ -175,12 +201,53 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('route/route.observer',["require", "exports", "../utils/utils", "../http/http"], factory);
+        define('history/history',["require", "exports", '../router/router.events', '../location/location.model'], factory);
+    }
+})(function (require, exports) {
+    'use strict';
+    var router_events_1 = require('../router/router.events');
+    var location_model_1 = require('../location/location.model');
+    var $history = [];
+    var $$history = window.history;
+    var currentIndex = -1;
+    function push(route, pathname) {
+        var splitTemplate = route.options.templateUrl.split('/');
+        var templateName = splitTemplate.pop();
+        if ($history[currentIndex - 1] === pathname) {
+            currentIndex--;
+        }
+        else if ($history[currentIndex + 1] === pathname) {
+            currentIndex++;
+        }
+        else {
+            $history.push(pathname);
+            currentIndex = $history.length - 1;
+            $$history.pushState({ path: pathname }, templateName, pathname);
+        }
+    }
+    exports.push = push;
+    function monitorBrowserNavigation() {
+        window.addEventListener('popstate', function (ev) {
+            ev.preventDefault();
+            console.log(ev);
+            router_events_1.startRouteChange(location_model_1.constructRoute(ev.state.path));
+        });
+    }
+    exports.monitorBrowserNavigation = monitorBrowserNavigation;
+});
+//# sourceMappingURL=../../src/tmp/maps/history/history.js.map;
+(function (factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define('route/route.observer',["require", "exports", "../utils/utils", "../http/http", '../history/history'], factory);
     }
 })(function (require, exports) {
     "use strict";
     var utils = require("../utils/utils");
     var http_1 = require("../http/http");
+    var $history = require('../history/history');
     var routes = [];
     var fallback = window.location.origin + "/";
     var pageIndex = 0;
@@ -197,7 +264,7 @@
             findMatch(next, function (match) {
                 if (!match)
                     return next.path(fallback);
-                history.pushState({ path: match.path }, 'page', next.pathname);
+                $history.push(match, next.pathname);
                 next.matchingPath = match.path;
                 http_1.default.get(match.options.templateUrl, function (err, data) {
                     var view = utils.getView();
@@ -226,6 +293,7 @@
     exports.addFallback = addFallback;
     function start() {
         monitorRouteChange();
+        $history.monitorBrowserNavigation();
     }
     exports.start = start;
 });
