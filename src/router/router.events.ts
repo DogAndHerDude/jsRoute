@@ -11,7 +11,7 @@ function onRun() {
 
 function startRouteChange(location) {
   var root = utils.getRoot();
-  root.broadcastEvent("routeChange", { detail: location });
+  eventHandler.broadcastEvent("routeChange", root, { detail: location });
 }
 
 function interceptLinks() {
@@ -28,7 +28,6 @@ function interceptLinks() {
 }
 
 function register() {
-  eventHandler.extendRoot();
   interceptLinks();
 }
 

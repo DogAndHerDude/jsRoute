@@ -437,17 +437,14 @@ define("../node_modules/almond/almond", function(){});
     }
 })(function (require, exports) {
     "use strict";
-    function broadcastEvent(eventName, eventData) {
+    function broadcastEvent(eventName, element, eventData) {
         var args = [].slice.call(arguments);
         var _event;
         eventData.cancelable = true;
         _event = new CustomEvent(eventName, eventData);
-        this.dispatchEvent(_event);
+        element.dispatchEvent(_event);
     }
-    function extendRoot() {
-        Object.prototype['broadcastEvent'] = broadcastEvent;
-    }
-    exports.extendRoot = extendRoot;
+    exports.broadcastEvent = broadcastEvent;
 });
 //# sourceMappingURL=../../src/tmp/maps/events/eventHandler.js.map;
 (function (factory) {
@@ -563,7 +560,7 @@ define("../node_modules/almond/almond", function(){});
     exports.onRun = onRun;
     function startRouteChange(location) {
         var root = utils.getRoot();
-        root.broadcastEvent("routeChange", { detail: location });
+        eventHandler.broadcastEvent("routeChange", root, { detail: location });
     }
     exports.startRouteChange = startRouteChange;
     function interceptLinks() {
@@ -576,7 +573,6 @@ define("../node_modules/almond/almond", function(){});
         });
     }
     function register() {
-        eventHandler.extendRoot();
         interceptLinks();
     }
     exports.register = register;
@@ -636,7 +632,6 @@ define("../node_modules/almond/almond", function(){});
         if (!popStateInvoked) {
             $history.push(pathname);
             currentIndex = $history.length - 1;
-            console.log(pathname);
             $$history.pushState({ path: pathname }, templateName, pathname);
         }
         popStateInvoked = false;

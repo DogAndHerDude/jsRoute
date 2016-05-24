@@ -2,7 +2,7 @@
 
 import * as utils from "../utils/utils";
 
-function broadcastEvent(eventName: string, eventData): void {
+function broadcastEvent(eventName: string, element, eventData): void {
   var args = [].slice.call(arguments);
   var _event;
 
@@ -10,11 +10,7 @@ function broadcastEvent(eventName: string, eventData): void {
 
   _event = new CustomEvent(eventName, eventData);
 
-  this.dispatchEvent(_event);
+  element.dispatchEvent(_event);
 }
 
-function extendRoot(): void {
-  Object.prototype['broadcastEvent'] = broadcastEvent;
-}
-
-export { extendRoot };
+export { broadcastEvent };
