@@ -12,25 +12,27 @@ A javascript router inspired by ngRoute module.
   // Instantiate a new Router
   // Provide view element that you want your app to run in
 
-  var myRouter = new JSRoute('.jsroute-view');
+  var myRouter = new JSRoute('.jsroute-app', '.jsroute-view');
 
   // Set up paths
 
-  myRouter
-    .when('/', {
-      templateUrl: 'path/to/template',
-      onLoad: function() {
-      // This function will fire after the template has loaded
-      }
-    })
-    .when('/another/:group', {
-      templateUrl: 'path/to/template',
-      onLoad: function() {
+  myRouter.config(function(routeProvider) {
+    routeProvider
+      .when('/', {
+        templateUrl: 'path/to/template',
+        onLoad: function() {
+        // This function will fire after the template has loaded
+        }
+      })
+      .when('/another/:group', {
+        templateUrl: 'path/to/template',
+        onLoad: function() {
 
-      }
-    })
-    // In case path doesn't match any of the registered routes, it redirects to a another route
-    .otherwise('/');
+        }
+      })
+      // In case path doesn't match any of the registered routes, it redirects to a another route
+      .otherwise('/');
+  });
 ```
 
 ### HTML
@@ -42,7 +44,7 @@ A javascript router inspired by ngRoute module.
       <meta charset="utf-8">
       <title>My app</title>
     </head>
-    <!-- The app must have a class "jsroute-app" on the root element that you want your app to run on -->
+    <!-- Declare the root app element -->
     <body class="jsroute-app">
 
       <!-- Declare the view element -->
@@ -56,11 +58,29 @@ A javascript router inspired by ngRoute module.
   </html>
 ```
 
-### JSRoute(selector)
+### JSRoute(rootElement, viewElement)
 
-Type: `Function`, Parameter: `string`, creates a new router with the given selector.
+Type: `Function`, Parameters: `string`, creates a new router with the given selectors.
 
-#### when(path, options)
+  1. rootElement Type: `string` Default: `.jsroute-app` selector for the root element
+
+  2. viewElement Type: `string` Default: `.jsroute-view` selector for the view element
+
+
+#### config(routeProvider)
+
+  Type: `Function`, Parameters: `object`, provides are provider to set up the paths to your app
+
+##### routeProvider
+
+  Type: `object`, the provider to register new routes.
+
+  Object properties:
+
+  - `when` Type: `Function`, Parameters: `string`, `object`, registers a new path with path options
+  - `otherwise` Type: `Function`, Parameters: `string`, registers a fallback path
+
+###### routeProvider when(path, options)
 
   1. path - Type: `string`
 
@@ -93,7 +113,7 @@ Type: `Function`, Parameter: `string`, creates a new router with the given selec
        - `params` Type: `object`
        - `path` Type: `function` Parameters: `string`, will redirect to any new path given. Checks to see if it's on the same host, if so, starts a new `routeChange` event.
 
-#### otherwise(path)
+###### routeProvider otherwise(path)
 
   1. path - Type: `string`, a fallback path that the router redirects to in the case that no routes were matched.
 
