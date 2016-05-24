@@ -6,9 +6,32 @@
     <script src="/jsRoute.min.js"></script>
     <script type="text/javascript">
       window.onload = function() {
-        var myRouter = new JSRoute('.jsroute-view');
+        var myRouter = new JSRoute('.jsroute-app', '.jsroute-view');
 
-        myRouter.when('/', {
+        myRouter.config(function(routeProvider) {
+          routeProvider
+            .when('/', {
+              templateUrl: '/views/main.view.html',
+              onLoad: function() {
+              }
+            }).when('/groups/:group', {
+              templateUrl: '/views/group.view.html',
+              onLoad: function(view, rootElement, location) {
+              }
+            }).when('/group/:id', {
+              templateUrl: 'url',
+              onLoad: function() {
+
+              }
+            }).when('/group', {
+              templateUrl: '/views/groupSingle.view.html',
+              onLoad: function() {
+
+              }
+            }).otherwise('/');
+        });
+
+        /*myRouter.when('/', {
           templateUrl: '/views/main.view.html',
           onLoad: function() {
           }
@@ -26,7 +49,7 @@
           onLoad: function() {
 
           }
-        }).otherwise('/');
+        }).otherwise('/');*/
       }
     </script>
 

@@ -9,16 +9,24 @@ var rootView;
 
 function noop() {}
 
-function setView(selector) {
-  rootView = document.querySelector(selector);
+function setView(selector): void {
+  if(selector) {
+    rootView = document.querySelector(selector);
+  } else {
+    rootView = document.querySelector('.jsroute-view');
+  }
 }
 
 function getView() {
   return rootView;
 }
 
-function setRoot() {
-  rootElement = document.querySelector('.jsroute-app');
+function setRoot(selector): void {
+  if(selector) {
+    rootElement = document.querySelector(selector);
+  } else {
+    rootElement = document.querySelector('.jsroute-app');
+  }
 }
 
 function getRoot() {

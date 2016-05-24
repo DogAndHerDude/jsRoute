@@ -40,15 +40,25 @@
     function noop() { }
     exports.noop = noop;
     function setView(selector) {
-        rootView = document.querySelector(selector);
+        if (selector) {
+            rootView = document.querySelector(selector);
+        }
+        else {
+            rootView = document.querySelector('.jsroute-view');
+        }
     }
     exports.setView = setView;
     function getView() {
         return rootView;
     }
     exports.getView = getView;
-    function setRoot() {
-        rootElement = document.querySelector('.jsroute-app');
+    function setRoot(selector) {
+        if (selector) {
+            rootElement = document.querySelector(selector);
+        }
+        else {
+            rootElement = document.querySelector('.jsroute-app');
+        }
     }
     exports.setRoot = setRoot;
     function getRoot() {
@@ -70,7 +80,11 @@
     var router_events_1 = require("../router/router.events");
     var $Location = (function () {
         function $Location(url) {
+            this.params = {};
             this.hash = url.match(/^#*\?|$/) || '';
+            if (typeof this.hash === 'object') {
+                this.hash = this.hash[0];
+            }
             this.host = url.match(utils.hostRegex) || window.location.host;
             if (typeof this.host === 'object') {
                 this.host = this.host[0];
@@ -244,7 +258,7 @@
                     var view = utils.getView();
                     view.innerHTML = data;
                     if (match.options.onLoad)
-                        match.options.onLoad(view, utils.getRoot(), next);
+                        match.options.onLoad(utils.getRoot(), next);
                 });
             });
         }
@@ -313,27 +327,48 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('router/router',["require", "exports", "./router.events", "../route/route.observer", "../route/route.model", "../utils/utils"], factory);
+        define('route/route.provider',["require", "exports", "./route.model", "./route.observer"], factory);
+    }
+})(function (require, exports) {
+    'use strict';
+    var route_model_1 = require("./route.model");
+    var observer = require("./route.observer");
+    var provider = {
+        when: function (path, options) {
+            var route = new route_model_1.Route(path, options);
+            observer.addRoute(route);
+            return this;
+        },
+        otherwise: function (path) {
+            observer.addFallback(path);
+            return this;
+        }
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = provider;
+});
+//# sourceMappingURL=../../src/tmp/maps/route/route.provider.js.map;
+(function (factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define('router/router',["require", "exports", "./router.events", "../route/route.observer", "../route/route.provider", "../utils/utils"], factory);
     }
 })(function (require, exports) {
     "use strict";
     var events = require("./router.events");
     var observer = require("../route/route.observer");
-    var route_model_1 = require("../route/route.model");
+    var route_provider_1 = require("../route/route.provider");
     var utils = require("../utils/utils");
     var Router = (function () {
-        function Router(view) {
+        function Router(rootElement, view) {
+            utils.setRoot(rootElement);
             utils.setView(view);
-            utils.setRoot();
-            events.register();
         }
-        Router.prototype.when = function (path, options) {
-            var route = new route_model_1.Route(path, options);
-            observer.addRoute(route);
-            return this;
-        };
-        Router.prototype.otherwise = function (redirectTo) {
-            observer.addFallback(redirectTo);
+        Router.prototype.config = function (callback) {
+            callback(route_provider_1.default);
+            events.register();
             observer.start();
             events.onRun();
         };
