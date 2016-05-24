@@ -2,10 +2,11 @@
 
 A javascript router inspired by ngRoute module.
 
-# Usage
+# Documentation
 
+## Overview
 
-## javascript
+### JS
 
 ```javascript
   // Instantiate a new Router
@@ -32,7 +33,7 @@ A javascript router inspired by ngRoute module.
     .otherwise('/');
 ```
 
-## HTML
+### HTML
 
 ```html
   <!DOCTYPE html>
@@ -54,6 +55,49 @@ A javascript router inspired by ngRoute module.
     <script type="text/javascript" src="jsRoute.min.js"></script>
   </html>
 ```
+
+### JSRoute(string)
+
+Type: `Function`, creates a new router.
+
+#### when(path, options)
+
+  1. path - Type: `string`
+
+     Route path. When a link is clicked or a browser history event is invoked (back, forward) the router emits a `routeChange` event on his root element. Supports groups, e.g.
+
+     - `:id` all characters until the next slash will be stored in the `location` object as parameter. Example: `/group/:id` will match `/group/123456` and store the ID inside of `location` object as `id: 123456`
+
+  2. options - Type: `object`
+
+     Object properties:
+
+     - `templateUrl` Type: `string`, a relative path where to find the template that should load when a path is matched.
+     - `onLoad` Type: `function`, a function that is invoked after the template has been loaded into the view. The function has its own parameters: `rootElement`, `location`.
+
+     1. onLoad rootElement - Type: `object`, the root element of the app.
+
+     2. onLoad location - Type: `object`, the current location object.
+
+       Object properties:
+
+       - `hash` Type: `string`
+       - `protocol` Type: `string`
+       - `host` Type: `string`
+       - `href` Type: `string`
+       - `pathname` Type: `string`
+       - `origin` Type: `string`
+       - `search` Type: `string`
+       - `hostname` Type: `string`
+       - `matchingPath` Type: `string`
+       - `params` Type: `object`
+       - `path` Type: `function` Parameters: `string`, will redirect to any new path given. Checks to see if it's on the same host, if so, starts a new `routeChange` event.
+
+#### otherwise(path)
+
+  1. path - Type: `string`, a fallback path that the router redirects to in the case that no routes were matched.
+
+
 
 # Building it yourself
 

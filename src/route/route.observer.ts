@@ -35,7 +35,7 @@ function changeCallback(ev) {
 
         view.innerHTML = data;
 
-        if(match.options.onLoad) match.options.onLoad(view, utils.getRoot(), next);
+        if(match.options.onLoad) match.options.onLoad(utils.getRoot(), next);
       });
     });
   }

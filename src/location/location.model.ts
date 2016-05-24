@@ -14,6 +14,7 @@ interface LocationInterface {
   search: string;
   hostname: string;
   matchingPath: string;
+  params: Object;
   path(pathString: string): void;
 }
 
@@ -27,6 +28,7 @@ class $Location implements LocationInterface {
   public search: string;
   public href: string;
   public matchingPath: string;
+  public params: Object = {};
 
   constructor(url) {
     this.hash = url.match(/^#*\?|$/) || '';
