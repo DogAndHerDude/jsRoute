@@ -30,6 +30,11 @@ class $Location implements LocationInterface {
 
   constructor(url) {
     this.hash = url.match(/^#*\?|$/) || '';
+
+    if(typeof this.hash === 'object') {
+      this.hash = this.hash[0];
+    }
+
     this.host = url.match(utils.hostRegex) || window.location.host;
 
     if(typeof this.host === 'object') {
@@ -61,7 +66,7 @@ function constructRoute(href) {
   var prev = window.location;
   var next = new $Location(href);
 
-  return {next, prev};
+  return { next, prev };
 }
 
 export { constructRoute };
