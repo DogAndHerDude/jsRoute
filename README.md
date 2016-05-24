@@ -2,6 +2,33 @@
 
 A javascript router inspired by ngRoute module.
 
+# Usage
+
+```javascript
+  // Instantiate a new Router
+  // Provide view element that you want your app to run in
+
+  var myRouter = new JSRoute('.jsroute-view');
+
+  // Set up paths
+
+  myRouter
+    .when('/', {
+      templateUrl: 'path/to/template',
+      onLoad: function() {
+      // This function will fire after the template has loaded
+      }
+    })
+    .when('/another/:group', {
+      templateUrl: 'path/to/template',
+      onLoad: function() {
+
+      }
+    })
+    // In case path doesn't match any of the registered routes, it redirects to a another route
+    .otherwise('/');
+```
+
 # Building it yourself
 
 ## Requirements
