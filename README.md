@@ -2,11 +2,7 @@
 
 Status: `wip`
 
-A javascript router
-
-## NOTE
-
-It's still work in progress. No actual functions are yet usable
+A javascript router inspired by ngRoute module.
 
 # Building it yourself
 
@@ -26,7 +22,7 @@ It's still work in progress. No actual functions are yet usable
 4. Run `grunt serve` to build the router & start a web server
 5. Server us served on `localhost:9000`
 
-## TODO
+# TODO
 
 1. Write documentation
 2. Write tests
