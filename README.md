@@ -60,7 +60,7 @@ A javascript router inspired by ngRoute module.
 
 ### JSRoute(rootElement, viewElement)
 
-Type: `Function`, Parameters: `string`, creates a new router with the given selectors.
+Type: `function`, Parameters: `string`, creates a new router with the given selectors.
 
   1. rootElement Type: `string` Default: `.jsroute-app` selector for the root element
 
@@ -69,7 +69,7 @@ Type: `Function`, Parameters: `string`, creates a new router with the given sele
 
 #### config(routeProvider)
 
-  Type: `Function`, Parameters: `object`, provides are provider to set up the paths to your app
+  Type: `function`, Parameters: `object`, provides are provider to set up the paths to your app
 
 ##### routeProvider
 
@@ -77,7 +77,7 @@ Type: `Function`, Parameters: `string`, creates a new router with the given sele
 
   Object properties:
 
-  - `when` Type: `Function`, Parameters: `string`, `object`, registers a new path with path options
+  - `when` Type: `function`, Parameters: `string`, `object`, registers a new path with path options
   - `otherwise` Type: `Function`, Parameters: `string`, registers a fallback path
 
 ###### routeProvider.when(path, options)
