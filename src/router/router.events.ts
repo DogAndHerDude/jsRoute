@@ -24,7 +24,6 @@ function interceptLinks() {
       startRouteChange(constructRoute(ev.target.href));
     }
   });
-
 }
 
 function register() {

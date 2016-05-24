@@ -2,35 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
-    <script type="text/javascript">
-      window.onload = function() {
-        var myRouter = new JSRoute('.jsroute-app', '.jsroute-view');
-
-        myRouter.config(function(routeProvider) {
-          routeProvider
-            .when('/', {
-              templateUrl: '/views/main.view.html',
-              onLoad: function() {
-              }
-            }).when('/groups/:group', {
-              templateUrl: '/views/group.view.html',
-              onLoad: function(view, rootElement, location) {
-              }
-            }).when('/group/:id', {
-              templateUrl: 'url',
-              onLoad: function() {
-
-              }
-            }).when('/group', {
-              templateUrl: '/views/groupSingle.view.html',
-              onLoad: function() {
-
-              }
-            }).otherwise('/');
-        });
-      }
-    </script>
+    <title>jsRoute example</title>
 
     <!--bower:css-->
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
@@ -52,6 +24,7 @@
 
   <!-- injector:js -->
   <script src="/jsRoute.min.js"></script>
+  <script src="/jsRoute.example.js"></script>
   <!-- endinjector -->
 
   <!--bower:js-->
