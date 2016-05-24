@@ -80,7 +80,7 @@ Type: `Function`, Parameters: `string`, creates a new router with the given sele
   - `when` Type: `Function`, Parameters: `string`, `object`, registers a new path with path options
   - `otherwise` Type: `Function`, Parameters: `string`, registers a fallback path
 
-###### routeProvider when(path, options)
+###### routeProvider.when(path, options)
 
   1. path - Type: `string`
 
@@ -113,7 +113,7 @@ Type: `Function`, Parameters: `string`, creates a new router with the given sele
        - `params` Type: `object`
        - `path` Type: `function` Parameters: `string`, will redirect to any new path given. Checks to see if it's on the same host, if so, starts a new `routeChange` event.
 
-###### routeProvider otherwise(path)
+###### routeProvider.otherwise(path)
 
   1. path - Type: `string`, a fallback path that the router redirects to in the case that no routes were matched.
 
