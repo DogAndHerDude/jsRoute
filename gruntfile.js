@@ -86,6 +86,24 @@ module.exports = function(grunt) {
       }
     },
 
+    wiredep: {
+      target: {
+        src: 'example/index.html'
+      }
+    },
+
+    injector: {
+      options: {
+        starttag: '<!-- injector:{{ext}} -->',
+        endtag: '<!-- endinjector -->'
+      },
+      local_dependencies: {
+        files: {
+          'example/index.html': ['example/*.min.js']
+        }
+      }
+    },
+
     express: {
       dev: {
         options: {
@@ -109,12 +127,14 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-tsd');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-requirejs')
+  grunt.loadNpmTasks('grunt-wiredep');
+  grunt.loadNpmTasks('grunt-injector');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
 
   grunt.registerTask('wait', function () {
     grunt.log.ok('Waiting for server reload...');
@@ -139,9 +159,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask('serve', [
     'build',
+    'wiredep',
+    'injector',
     'express:dev',
     'watch'
-    //'express-keepalive'
   ]);
 
   grunt.registerTask('default', [

@@ -29,6 +29,13 @@
         }).otherwise('/');
       }
     </script>
+
+    <!--bower:css-->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!--endbower-->
+
+    <!-- injector:css -->
+    <!-- endinjector -->
   </head>
   <body class="jsroute-app">
     <a href="http://www.google.com/test/path">Google</a>
@@ -38,8 +45,15 @@
     <a href="/do/not/match">No match</a>
 
     <div class="jsroute-view">
-      <button class="buttonb" type="button" name="buttonb">b</button>
-      <button class="buttonf" type="button" name="buttonf">f</button>
     </div>
   </body>
+
+  <!-- injector:js -->
+  <script src="/example/jsRoute.min.js"></script>
+  <!-- endinjector -->
+
+  <!--bower:js-->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <!--endbower-->
 </html>

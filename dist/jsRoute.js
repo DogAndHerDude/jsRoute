@@ -503,7 +503,7 @@ define("../node_modules/almond/almond", function(){});
             this.hash = url.match(/^#*\?|$/) || '';
             this.host = url.match(utils.hostRegex) || window.location.host;
             if (typeof this.host === 'object') {
-                this.host = this.protocol[0];
+                this.host = this.host[0];
             }
             this.hostname = this.host.match(/\w+/)[0];
             this.protocol = url.match(utils.protocolRegex) || window.location.protocol;

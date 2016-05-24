@@ -33,7 +33,7 @@ class $Location implements LocationInterface {
     this.host = url.match(utils.hostRegex) || window.location.host;
 
     if(typeof this.host === 'object') {
-      this.host = this.protocol[0];
+      this.host = this.host[0];
     }
 
     this.hostname = this.host.match(/\w+/)[0];

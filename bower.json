@@ -1,0 +1,35 @@
+{
+  "name": "js-route",
+  "description": "A JavaScript router that loads data and pages based on the current window location",
+  "main": "index.html",
+  "authors": [
+    "Dominykas Bartkus"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "router",
+    "javascript"
+  ],
+  "homepage": "https://github.com/Forestdev/jsRoute",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "example/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/js/bootstrap.js",
+        "dist/css/bootstrap.css",
+        "less/bootstrap.less"
+          ]
+      }
+  }
+}

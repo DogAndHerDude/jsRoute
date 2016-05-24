@@ -2,3 +2,4 @@
 node_modules
 .tscache
 example/jsRoute.min.js
+example/bower_components
