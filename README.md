@@ -4,6 +4,9 @@ A javascript router inspired by ngRoute module.
 
 # Usage
 
+
+## javascript
+
 ```javascript
   // Instantiate a new Router
   // Provide view element that you want your app to run in
@@ -27,6 +30,29 @@ A javascript router inspired by ngRoute module.
     })
     // In case path doesn't match any of the registered routes, it redirects to a another route
     .otherwise('/');
+```
+
+## HTML
+
+```html
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>My app</title>
+    </head>
+    <!-- The app must have a class "jsroute-app" on the root element that you want your app to run on -->
+    <body class="jsroute-app">
+
+      <!-- Declare the view element -->
+      <div class="jsroute-view">
+
+      </div>
+
+    </body>
+
+    <script type="text/javascript" src="jsRoute.min.js"></script>
+  </html>
 ```
 
 # Building it yourself
