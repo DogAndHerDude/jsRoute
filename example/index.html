@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-    <script src="/jsRoute.min.js"></script>
     <script type="text/javascript">
       window.onload = function() {
         var myRouter = new JSRoute('.jsroute-app', '.jsroute-view');
@@ -30,31 +29,11 @@
               }
             }).otherwise('/');
         });
-
-        /*myRouter.when('/', {
-          templateUrl: '/views/main.view.html',
-          onLoad: function() {
-          }
-        }).when('/groups/:group', {
-          templateUrl: '/views/group.view.html',
-          onLoad: function(view, rootElement, location) {
-          }
-        }).when('/group/:id', {
-          templateUrl: 'url',
-          onLoad: function() {
-
-          }
-        }).when('/group', {
-          templateUrl: '/views/groupSingle.view.html',
-          onLoad: function() {
-
-          }
-        }).otherwise('/');*/
       }
     </script>
 
     <!--bower:css-->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
     <!--endbower-->
 
     <!-- injector:css -->
@@ -72,11 +51,11 @@
   </body>
 
   <!-- injector:js -->
-  <script src="/example/jsRoute.min.js"></script>
+  <script src="/jsRoute.min.js"></script>
   <!-- endinjector -->
 
   <!--bower:js-->
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/bower_components/jquery/dist/jquery.js"></script>
+  <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <!--endbower-->
 </html>

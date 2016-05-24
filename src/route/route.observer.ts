@@ -7,7 +7,7 @@ import $http from "../http/http";
 import * as $history from '../history/history';
 
 var routes: Array<routeModel.Route> = [];
-var fallback: string = window.location.origin + "/";
+var fallback: string = "/";
 var pageIndex = 0;
 
 function monitorRouteChange() {

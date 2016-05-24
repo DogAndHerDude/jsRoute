@@ -199,25 +199,23 @@
     var $history = [];
     var $$history = window.history;
     var currentIndex = -1;
+    var popStateInvoked = false;
     function push(route, pathname) {
         var splitTemplate = route.options.templateUrl.split('/');
         var templateName = splitTemplate.pop();
-        if ($history[currentIndex - 1] === pathname) {
-            currentIndex--;
-        }
-        else if ($history[currentIndex + 1] === pathname) {
-            currentIndex++;
-        }
-        else {
+        if (!popStateInvoked) {
             $history.push(pathname);
             currentIndex = $history.length - 1;
+            console.log(pathname);
             $$history.pushState({ path: pathname }, templateName, pathname);
         }
+        popStateInvoked = false;
     }
     exports.push = push;
     function monitorBrowserNavigation() {
         window.addEventListener('popstate', function (ev) {
             ev.preventDefault();
+            popStateInvoked = true;
             router_events_1.startRouteChange(location_model_1.constructRoute(ev.state.path));
         });
     }
@@ -237,7 +235,7 @@
     var http_1 = require("../http/http");
     var $history = require('../history/history');
     var routes = [];
-    var fallback = window.location.origin + "/";
+    var fallback = "/";
     var pageIndex = 0;
     function monitorRouteChange() {
         var root = utils.getRoot();

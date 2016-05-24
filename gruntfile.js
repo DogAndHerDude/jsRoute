@@ -88,14 +88,40 @@ module.exports = function(grunt) {
 
     wiredep: {
       target: {
-        src: 'example/index.html'
+        src: 'example/index.html',
+        ignorePath: /^(\/|\.+(?!\/[^\.]))+\.+/,
+        options: {
+          fileTypes: {
+            html: {
+              detect: {
+                js: /<script.*src=['"]([^'"]+)/gi,
+                css: /<link.*href=['"]([^'"]+)/gi
+              },
+              replace: {
+                js: '<script src="/{{filePath}}"></script>',
+                css: '<link rel="stylesheet" href="/{{filePath}}" />'
+              }
+            }
+          }
+        }
       }
     },
 
     injector: {
       options: {
         starttag: '<!-- injector:{{ext}} -->',
-        endtag: '<!-- endinjector -->'
+        endtag: '<!-- endinjector -->',
+        transform: function(filePath) {
+          filePath = filePath.replace('/example', '');
+
+          if(/w*.js/.test(filePath)) {
+            return '<script src="' + filePath + '"></script>';
+          }
+
+          if(/w*.css/.test(filePath)) {
+            return '<link rel="stylesheet"' + filePath + '" />';
+          }
+        }
       },
       local_dependencies: {
         files: {
