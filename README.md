@@ -1,7 +1,5 @@
 # jsRoute
 
-Status: `wip`
-
 A javascript router inspired by ngRoute module.
 
 # Building it yourself
