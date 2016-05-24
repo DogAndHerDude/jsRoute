@@ -679,6 +679,7 @@ define("../node_modules/almond/almond", function(){});
                 next.matchingPath = match.path;
                 http_1.default.get(match.options.templateUrl, function (err, data) {
                     var view = utils.getView();
+                    next.params = match.getParams(next.pathname);
                     view.innerHTML = data;
                     if (match.options.onLoad)
                         match.options.onLoad(utils.getRoot(), next);
@@ -739,6 +740,20 @@ define("../node_modules/almond/almond", function(){});
                     return false;
             }
             return true;
+        };
+        Route.prototype.getParams = function (path) {
+            var self = this;
+            var splitPath = path.split('/');
+            var splitRoute = self.path.split('/');
+            var params = {};
+            for (var i = 1, ii = splitRoute.length; i < ii; i++) {
+                var rgxParam = /:\w+/;
+                if (rgxParam.test(splitRoute[i])) {
+                    var paramName = splitRoute[i].replace(':', '');
+                    params[paramName] = splitPath[i];
+                }
+            }
+            return params;
         };
         return Route;
     }());

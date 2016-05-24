@@ -119,20 +119,20 @@ module.exports = function(grunt) {
           }
 
           if(/w*.css/.test(filePath)) {
-            return '<link rel="stylesheet"' + filePath + '" />';
+            return '<link rel="stylesheet" href="' + filePath + '" />';
           }
         },
         sort: function(a, b) {
           var script = /jsRoute.min.js$/;
           var aMod = script.test(a);
           var bMod = script.test(b);
-          
+
           return (aMod === bMod) ? 0 : (aMod ? -1 : 1);
         }
       },
       local_dependencies: {
         files: {
-          'example/index.html': ['example/*.js']
+          'example/index.html': ['example/*.js', 'example/styles/*.css']
         }
       }
     },

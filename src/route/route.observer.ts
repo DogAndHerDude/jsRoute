@@ -14,7 +14,6 @@ function monitorRouteChange() {
   var root = utils.getRoot();
 
   root.addEventListener('routeChange', changeCallback, false);
-  //eventHandler.onEvent("routeChange", utils.getRoot(), changeCallback);
 }
 
 function changeCallback(ev) {
@@ -28,11 +27,11 @@ function changeCallback(ev) {
     findMatch(next, (match) => {
       if(!match) return next.path(fallback);
       $history.push(match, next.pathname);
-      //history.pushState({path: next.pathname}, 'page', next.pathname);
       next.matchingPath = match.path;
       $http.get(match.options.templateUrl, (err, data) => {
         var view = utils.getView();
 
+        next.params = match.getParams(next.pathname);
         view.innerHTML = data;
 
         if(match.options.onLoad) match.options.onLoad(utils.getRoot(), next);

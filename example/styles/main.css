@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+.navbar-main {
+  margin: 0;
+  border-radius: 0;
+}
+
+/*.navbar-main {
+  width: 100%;
+  position: fixed;
+  border-radius: 0;
+}*/
+
+.main {
+  width: 100%;
+  position: relative;
+}
+
+.main .main-header {
+  height: 700px;
+  background-color: #3498db;
+}
+
+.main-header .inner-content {
+  color: #fff;
+  padding: 250px 0;
+}
+
+.main-info {
+  padding: 50px 0;
+}
+
+.bad-link {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.bad-link a {
+  font-size: 32px;
+  position: relative;
+  display: inline-block;
+}

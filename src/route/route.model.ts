@@ -35,6 +35,24 @@ class Route {
 
     return true;
   }
+
+  public getParams(path: string): Object {
+    var self = this;
+    var splitPath = path.split('/');
+    var splitRoute = self.path.split('/');
+    var params = {};
+
+    for(var i = 1, ii = splitRoute.length; i < ii; i++) {
+      let rgxParam = /:\w+/;
+
+      if(rgxParam.test(splitRoute[i])) {
+        let paramName = splitRoute[i].replace(':', '');
+        params[paramName] = splitPath[i];
+      }
+    }
+
+    return params;
+  }
 }
 
 export { RouteOptions };

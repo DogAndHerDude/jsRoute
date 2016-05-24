@@ -9,14 +9,21 @@
     <!--endbower-->
 
     <!-- injector:css -->
+    <link rel="stylesheet" href="/styles/main.css" />
     <!-- endinjector -->
   </head>
   <body class="jsroute-app">
-    <a href="http://www.google.com/test/path">Google</a>
-    <a href="/groups/coolgroup">Match /groups/:group</a>
-    <a href="/group/1555789">Match /group/:id</a>
-    <a href="/group">Match /group</a>
-    <a href="/do/not/match">No match</a>
+    <nav class="navbar navbar-default navbar-main">
+      <div class="container-fluid container">
+        <div class="navbar-header">
+          <ul class="nav navbar-nav">
+            <li><a href="/groups/888444666">Link 1</a></li>
+            <li><a href="/page2">Link 2</a></li>
+            <li><a href="/do/not/match">This link doesn't exist</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <div class="jsroute-view">
     </div>
