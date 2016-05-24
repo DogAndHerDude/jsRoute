@@ -56,9 +56,9 @@ A javascript router inspired by ngRoute module.
   </html>
 ```
 
-### JSRoute(string)
+### JSRoute(selector)
 
-Type: `Function`, creates a new router.
+Type: `Function`, Parameter: `string`, creates a new router with the given selector.
 
 #### when(path, options)
 
