@@ -22,4 +22,4 @@ class Router {
   }
 }
 
-export { Router as JSRoute };
+export default Router;
