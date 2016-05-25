@@ -7,7 +7,7 @@ import { RouteOptions } from "../route/route.model";
 import routeProvider from "../route/route.provider";
 import * as utils from "../utils/utils";
 
-export class Router {
+class Router {
   constructor(rootElement, view) {
     utils.setRoot(rootElement);
     utils.setView(view);
@@ -21,3 +21,5 @@ export class Router {
     events.onRun();
   }
 }
+
+export { Router as JSRoute };

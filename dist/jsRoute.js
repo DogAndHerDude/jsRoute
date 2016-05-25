@@ -812,7 +812,7 @@ define("../node_modules/almond/almond", function(){});
         };
         return Router;
     }());
-    exports.Router = Router;
+    exports.JSRoute = Router;
 });
 //# sourceMappingURL=../../src/tmp/maps/router/router.js.map;
 (function (factory) {
@@ -824,8 +824,10 @@ define("../node_modules/almond/almond", function(){});
     }
 })(function (require, exports) {
     'use strict';
-    var router_1 = require('./router/router');
-    exports.Router = router_1.Router;
+    function __export(m) {
+        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    }
+    __export(require('./router/router'));
 });
 //# sourceMappingURL=../src/tmp/maps/index.js.map;
-global.JSRoute = global.JSRoute || require("index").Router; }(window));
+global.JSRoute = global.JSRoute || require("index").JSRoute; console.log(require("index")); }(window));

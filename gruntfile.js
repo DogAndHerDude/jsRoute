@@ -47,15 +47,15 @@ module.exports = function(grunt) {
           out: 'dist/jsRoute.js',
           wrap: {
             start: '(function(global) {',
-            end: 'global.JSRoute = global.JSRoute || require("index").Router; }(window));'
+            end: 'global.JSRoute = global.JSRoute || require("index").JSRoute; console.log(require("index")); }(window));'
           },
           optimize: 'none'
         }
       },
       NoAMD: {
         options: {
-          baseUrl: '.tmp',
-          include: 'index',
+          baseUrl: '.tmp/router',
+          include: 'router',
           findNestedDependencies: true,
           out: 'dist/jsRoute.noamd.js',
           wrap: false,

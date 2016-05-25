@@ -3,7 +3,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('events/eventHandler',["require", "exports"], factory);
+        define('../events/eventHandler',["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -22,7 +22,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('utils/utils',["require", "exports"], factory);
+        define('../utils/utils',["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -69,7 +69,43 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('location/location.model',["require", "exports", '../utils/utils', "../router/router.events"], factory);
+        define('../router/router.events',["require", "exports", "../events/eventHandler", "../location/location.model", "../utils/utils"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    var eventHandler = require("../events/eventHandler");
+    var location_model_1 = require("../location/location.model");
+    var utils = require("../utils/utils");
+    function onRun() {
+        startRouteChange(location_model_1.constructRoute(window.location.origin + window.location.pathname));
+    }
+    exports.onRun = onRun;
+    function startRouteChange(location) {
+        var root = utils.getRoot();
+        eventHandler.broadcastEvent("routeChange", root, { detail: location });
+    }
+    exports.startRouteChange = startRouteChange;
+    function interceptLinks() {
+        var root = utils.getRoot();
+        root.addEventListener('click', function (ev) {
+            if (ev.target.nodeName === "A") {
+                ev.preventDefault();
+                startRouteChange(location_model_1.constructRoute(ev.target.href));
+            }
+        });
+    }
+    function register() {
+        interceptLinks();
+    }
+    exports.register = register;
+});
+//# sourceMappingURL=../../src/tmp/maps/router/router.events.js.map;
+(function (factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define('../location/location.model',["require", "exports", '../utils/utils', "../router/router.events"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -117,7 +153,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('router/router.events',["require", "exports", "../events/eventHandler", "../location/location.model", "../utils/utils"], factory);
+        define('router.events',["require", "exports", "../events/eventHandler", "../location/location.model", "../utils/utils"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -153,7 +189,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('http/http',["require", "exports", '../utils/utils'], factory);
+        define('../http/http',["require", "exports", '../utils/utils'], factory);
     }
 })(function (require, exports) {
     'use strict';
@@ -186,7 +222,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('history/history',["require", "exports", '../router/router.events', '../location/location.model'], factory);
+        define('../history/history',["require", "exports", '../router/router.events', '../location/location.model'], factory);
     }
 })(function (require, exports) {
     'use strict';
@@ -222,7 +258,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('route/route.observer',["require", "exports", "../utils/utils", "../http/http", '../history/history'], factory);
+        define('../route/route.observer',["require", "exports", "../utils/utils", "../http/http", '../history/history'], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -285,7 +321,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('route/route.model',["require", "exports"], factory);
+        define('../route/route.model',["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -335,7 +371,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('route/route.provider',["require", "exports", "./route.model", "./route.observer"], factory);
+        define('../route/route.provider',["require", "exports", "./route.model", "./route.observer"], factory);
     }
 })(function (require, exports) {
     'use strict';
@@ -361,7 +397,7 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('router/router',["require", "exports", "./router.events", "../route/route.observer", "../route/route.provider", "../utils/utils"], factory);
+        define('router',["require", "exports", "./router.events", "../route/route.observer", "../route/route.provider", "../utils/utils"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -382,19 +418,6 @@
         };
         return Router;
     }());
-    exports.Router = Router;
+    exports.JSRoute = Router;
 });
 //# sourceMappingURL=../../src/tmp/maps/router/router.js.map;
-(function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === 'function' && define.amd) {
-        define('index',["require", "exports", './router/router'], factory);
-    }
-})(function (require, exports) {
-    'use strict';
-    var router_1 = require('./router/router');
-    exports.Router = router_1.Router;
-});
-//# sourceMappingURL=../src/tmp/maps/index.js.map;
