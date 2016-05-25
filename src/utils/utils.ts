@@ -10,11 +10,8 @@ var rootView;
 function noop() {}
 
 function setView(selector): void {
-  if(selector) {
-    rootView = document.querySelector(selector);
-  } else {
-    rootView = document.querySelector('.jsroute-view');
-  }
+  selector = selector || '.jsroute-view';
+  rootView = document.querySelector(selector);
 }
 
 function getView() {
@@ -22,11 +19,8 @@ function getView() {
 }
 
 function setRoot(selector): void {
-  if(selector) {
-    rootElement = document.querySelector(selector);
-  } else {
-    rootElement = document.querySelector('.jsroute-app');
-  }
+  selector = selector || '.jsroute-app';
+  rootElement = document.querySelector(selector);
 }
 
 function getRoot() {

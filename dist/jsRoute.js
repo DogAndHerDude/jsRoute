@@ -467,12 +467,8 @@ define("../node_modules/almond/almond", function(){});
     function noop() { }
     exports.noop = noop;
     function setView(selector) {
-        if (selector) {
-            rootView = document.querySelector(selector);
-        }
-        else {
-            rootView = document.querySelector('.jsroute-view');
-        }
+        selector = selector || '.jsroute-view';
+        rootView = document.querySelector(selector);
     }
     exports.setView = setView;
     function getView() {
@@ -480,12 +476,8 @@ define("../node_modules/almond/almond", function(){});
     }
     exports.getView = getView;
     function setRoot(selector) {
-        if (selector) {
-            rootElement = document.querySelector(selector);
-        }
-        else {
-            rootElement = document.querySelector('.jsroute-app');
-        }
+        selector = selector || '.jsroute-app';
+        rootElement = document.querySelector(selector);
     }
     exports.setRoot = setRoot;
     function getRoot() {
