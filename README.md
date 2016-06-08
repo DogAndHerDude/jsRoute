@@ -10,7 +10,8 @@ A javascript router inspired by ngRoute module.
 
 ```javascript
   // Instantiate a new Router
-  // Provide view element that you want your app to run in
+  // Primary - Provide view element that you want your app to run in
+  // Secondary - Provide a view element the app should load templates into
 
   var myRouter = new JSRoute('.jsroute-app', '.jsroute-view');
 
@@ -20,13 +21,13 @@ A javascript router inspired by ngRoute module.
     routeProvider
       .when('/', {
         templateUrl: 'path/to/template',
-        onLoad: function() {
+        onLoad: function(rootElement, location) {
         // This function will fire after the template has loaded
         }
       })
       .when('/another/:group', {
         templateUrl: 'path/to/template',
-        onLoad: function() {
+        onLoad: function(rootElement, location) {
 
         }
       })
