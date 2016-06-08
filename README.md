@@ -142,5 +142,6 @@ Type: `function`, Parameters: `string`, creates a new router with the given sele
 
 1. Write a better documentation
 2. Write tests
-3. Add page transition support
-4. Improve route pattern support
+3. Improve the private HTTP module
+4. Add page transition support
+5. Improve route pattern support
