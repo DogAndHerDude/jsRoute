@@ -1,5 +1,5 @@
 
-declare namespace LocationInterface{
+declare namespace LocationInterface {
     interface NewLocationConstructor {
       new(url: string);
     }

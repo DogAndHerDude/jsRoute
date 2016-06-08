@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
 import LocationInterface from '../typings/location/location.d';
 
 import * as utils from '../utils/utils';
-import { startRouteChange } from "../router/router.events";
+import { startRouteChange } from '../router/router.events';
 
 class $Location {
   public hash: string;

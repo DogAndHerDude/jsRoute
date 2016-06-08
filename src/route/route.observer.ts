@@ -1,15 +1,12 @@
-"use strict";
+'use strict';
 
-import RouteInterface from '../typings/route/route.d';
-
-import * as routeModel from "./route.model";
-import * as eventHandler from "../events/eventHandler";
-import * as utils from "../utils/utils";
-import $http from "../http/http";
+import * as routeModel from './route.model';
+import * as utils from '../utils/utils';
+import $http from '../http/http';
 import * as $history from '../history/history';
 
 var routes: Array<routeModel.Route> = [];
-var fallback: string = "/";
+var fallback = '/';
 
 function monitorRouteChange(): void {
   let root = utils.getRoot();
@@ -21,15 +18,15 @@ function insertTemplate(route: routeModel.Route, callback): void {
   const isCached = route.isCached();
   var view = utils.getView();
 
-  if(!isCached) {
+  if (!isCached) {
     $http.get(route.options.templateUrl, (err, data) => {
-      if(err) return callback(err);
-      if(!data) return callback();
+      if (err) { return callback(err); }
+      if (!data) { return callback(); }
 
       view.innerHTML = data;
 
-      if(route.options.cache) {
-        if(!isCached) {
+      if (route.options.cache) {
+        if (!isCached) {
           route.storeTemplateToCache(data);
         }
       }
@@ -43,31 +40,31 @@ function insertTemplate(route: routeModel.Route, callback): void {
 }
 
 function changeCallback(ev): void {
-  if(!ev.defaultPrevented) {
-    var next= ev.detail.next;
+  if (!ev.defaultPrevented) {
+    var next = ev.detail.next;
     var prev = ev.detail.prev;
 
     //If host is not own site : redirect
-    if(next.host !== prev.host) window.location.assign(next.href);
+    if (next.host !== prev.host) { window.location.assign(next.href); }
 
     findMatch(next, (match) => {
-      if(!match) return next.path(fallback);
+      if (!match) { return next.path(fallback); }
       $history.push(match, next.pathname);
       next.matchingPath = match.path;
       next.params = match.getParams(next.pathname);
 
       insertTemplate(match, (err, success) => {
-        if(err) return console.error(err);
-        if(!success) return console.info('No template retrieved from templateUrl');
-        if(match.options.onLoad) match.options.onLoad(utils.getRoot(), next);
+        if (err) { return console.error(err); }
+        if (!success) { return console.error('No template retrieved from templateUrl'); }
+        if (match.options.onLoad) { match.options.onLoad(utils.getRoot(), next); }
       });
     });
   }
 }
 
 function findMatch(next, callback): void {
-  for(let i = 0, ii = routes.length; i < ii; i++) {
-    if(routes[i].matchRoute(next.pathname)) {
+  for (let i = 0, ii = routes.length; i < ii; i++) {
+    if (routes[i].matchRoute(next.pathname)) {
         return callback(routes[i]);
     }
   }

@@ -1,9 +1,6 @@
-"use strict";
-
-import * as utils from "../utils/utils";
+'use strict';
 
 function broadcastEvent(eventName: string, element, eventData): void {
-  var args = [].slice.call(arguments);
   var _event;
 
   eventData.cancelable = true;

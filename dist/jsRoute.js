@@ -436,9 +436,8 @@ define("../node_modules/almond/almond", function(){});
         define('events/eventHandler',["require", "exports"], factory);
     }
 })(function (require, exports) {
-    "use strict";
+    'use strict';
     function broadcastEvent(eventName, element, eventData) {
-        var args = [].slice.call(arguments);
         var _event;
         eventData.cancelable = true;
         _event = new CustomEvent(eventName, eventData);
@@ -455,7 +454,7 @@ define("../node_modules/almond/almond", function(){});
         define('utils/utils',["require", "exports"], factory);
     }
 })(function (require, exports) {
-    "use strict";
+    'use strict';
     var protocolRegex = /\w+\:\/\//;
     exports.protocolRegex = protocolRegex;
     var hostRegex = /\w+\.\w{1,4}\//;
@@ -464,7 +463,7 @@ define("../node_modules/almond/almond", function(){});
     exports.pathRegex = pathRegex;
     var rootElement;
     var rootView;
-    function noop() { }
+    function noop() { return; }
     exports.noop = noop;
     function setView(selector) {
         selector = selector || '.jsroute-view';
@@ -491,12 +490,12 @@ define("../node_modules/almond/almond", function(){});
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('location/location.model',["require", "exports", '../utils/utils', "../router/router.events"], factory);
+        define('location/location.model',["require", "exports", '../utils/utils', '../router/router.events'], factory);
     }
 })(function (require, exports) {
-    "use strict";
+    'use strict';
     var utils = require('../utils/utils');
-    var router_events_1 = require("../router/router.events");
+    var router_events_1 = require('../router/router.events');
     var $Location = (function () {
         function $Location(url) {
             this.params = {};
@@ -636,15 +635,15 @@ define("../node_modules/almond/almond", function(){});
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('route/route.observer',["require", "exports", "../utils/utils", "../http/http", '../history/history'], factory);
+        define('route/route.observer',["require", "exports", '../utils/utils', '../http/http', '../history/history'], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    var utils = require("../utils/utils");
-    var http_1 = require("../http/http");
+    'use strict';
+    var utils = require('../utils/utils');
+    var http_1 = require('../http/http');
     var $history = require('../history/history');
     var routes = [];
-    var fallback = "/";
+    var fallback = '/';
     function monitorRouteChange() {
         var root = utils.getRoot();
         root.addEventListener('routeChange', changeCallback, false);
@@ -654,10 +653,12 @@ define("../node_modules/almond/almond", function(){});
         var view = utils.getView();
         if (!isCached) {
             http_1.default.get(route.options.templateUrl, function (err, data) {
-                if (err)
+                if (err) {
                     return callback(err);
-                if (!data)
+                }
+                if (!data) {
                     return callback();
+                }
                 view.innerHTML = data;
                 if (route.options.cache) {
                     if (!isCached) {
@@ -676,21 +677,26 @@ define("../node_modules/almond/almond", function(){});
         if (!ev.defaultPrevented) {
             var next = ev.detail.next;
             var prev = ev.detail.prev;
-            if (next.host !== prev.host)
+            if (next.host !== prev.host) {
                 window.location.assign(next.href);
+            }
             findMatch(next, function (match) {
-                if (!match)
+                if (!match) {
                     return next.path(fallback);
+                }
                 $history.push(match, next.pathname);
                 next.matchingPath = match.path;
                 next.params = match.getParams(next.pathname);
                 insertTemplate(match, function (err, success) {
-                    if (err)
+                    if (err) {
                         return console.error(err);
-                    if (!success)
-                        return console.info('No template retrieved from templateUrl');
-                    if (match.options.onLoad)
+                    }
+                    if (!success) {
+                        return console.error('No template retrieved from templateUrl');
+                    }
+                    if (match.options.onLoad) {
                         match.options.onLoad(utils.getRoot(), next);
+                    }
                 });
             });
         }
@@ -726,7 +732,7 @@ define("../node_modules/almond/almond", function(){});
         define('route/route.model',["require", "exports"], factory);
     }
 })(function (require, exports) {
-    "use strict";
+    'use strict';
     var Route = (function () {
         function Route(path, options) {
             this.cachedTemplate = null;
@@ -736,15 +742,18 @@ define("../node_modules/almond/almond", function(){});
         Route.prototype.matchRoute = function (nextPath) {
             var splitNext = nextPath.split('/');
             var splitRoute = this.path.split('/');
-            if (nextPath === '/' && nextPath === this.path)
+            if (nextPath === '/' && nextPath === this.path) {
                 return true;
-            if (splitRoute.length !== splitNext.length)
+            }
+            if (splitRoute.length !== splitNext.length) {
                 return false;
+            }
             for (var i = 1, ii = splitRoute.length; i < ii; i++) {
                 var rgxStr = splitNext[i] + "|\\:\\w+";
                 var rgx = new RegExp(rgxStr);
-                if (!rgx.test(splitRoute[i]))
+                if (!rgx.test(splitRoute[i])) {
                     return false;
+                }
             }
             return true;
         };
@@ -780,12 +789,12 @@ define("../node_modules/almond/almond", function(){});
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('route/route.provider',["require", "exports", "./route.model", "./route.observer"], factory);
+        define('route/route.provider',["require", "exports", './route.model', './route.observer'], factory);
     }
 })(function (require, exports) {
     'use strict';
-    var route_model_1 = require("./route.model");
-    var observer = require("./route.observer");
+    var route_model_1 = require('./route.model');
+    var observer = require('./route.observer');
     var provider = {
         when: function (path, options) {
             var route = new route_model_1.Route(path, options);
@@ -806,14 +815,14 @@ define("../node_modules/almond/almond", function(){});
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('router/router',["require", "exports", "./router.events", "../route/route.observer", "../route/route.provider", "../utils/utils"], factory);
+        define('router/router',["require", "exports", './router.events', '../route/route.observer', '../route/route.provider', '../utils/utils'], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    var events = require("./router.events");
-    var observer = require("../route/route.observer");
-    var route_provider_1 = require("../route/route.provider");
-    var utils = require("../utils/utils");
+    'use strict';
+    var events = require('./router.events');
+    var observer = require('../route/route.observer');
+    var route_provider_1 = require('../route/route.provider');
+    var utils = require('../utils/utils');
     var Router = (function () {
         function Router(rootElement, view) {
             utils.setRoot(rootElement);

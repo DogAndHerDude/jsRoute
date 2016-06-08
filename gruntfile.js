@@ -13,6 +13,15 @@ module.exports = function(grunt) {
       }
     },
 
+    tslint: {
+      options: {
+        configuration: 'tslint.json'
+      },
+      files: {
+        src: ['src/**/*.ts']
+      }
+    },
+
     /*tsd: {
       refresh: {
         options: {
@@ -161,6 +170,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-tsd');
+  grunt.loadNpmTasks('grunt-tslint');
   grunt.loadNpmTasks('grunt-wiredep');
   grunt.loadNpmTasks('grunt-injector');
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -184,6 +194,7 @@ module.exports = function(grunt) {
   grunt.registerTask('mergeAMD', ['requirejs:AMDIncluded', 'requirejs:NoAMD']);
 
   grunt.registerTask('build', [
+    'tslint',
     'clean',
     'ts',
     'mergeAMD',

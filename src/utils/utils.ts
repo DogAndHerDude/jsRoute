@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const protocolRegex = /\w+\:\/\//;
 const hostRegex = /\w+\.\w{1,4}\//;
@@ -7,7 +7,7 @@ const pathRegex = /\/w+|d+$|\//;
 var rootElement;
 var rootView;
 
-function noop() {}
+function noop() { return; }
 
 function setView(selector): void {
   selector = selector || '.jsroute-view';

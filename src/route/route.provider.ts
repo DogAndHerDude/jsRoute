@@ -2,8 +2,8 @@
 
 import RouteInterface from '../typings/route/route.d';
 
-import { Route } from "./route.model";
-import * as observer from "./route.observer";
+import { Route } from './route.model';
+import * as observer from './route.observer';
 
 var provider: RouteInterface.RouteProvider = {
   when(path: string, options: RouteInterface.RouteOptions): RouteInterface.RouteProvider {

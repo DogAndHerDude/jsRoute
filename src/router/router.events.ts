@@ -22,7 +22,7 @@ function interceptLinks() {
   var root = utils.getRoot();
 
   root.addEventListener('click', (ev) => {
-    if(ev.target.nodeName === 'A') {
+    if (ev.target.nodeName === 'A') {
       ev.preventDefault();
       // Start route matching and change
       startRouteChange(constructRoute(ev.target.href));

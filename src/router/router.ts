@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 import RouteInterface from '../typings/route/route.d';
 
-import * as events from "./router.events";
-import * as observer from "../route/route.observer";
-import routeProvider from "../route/route.provider";
-import * as utils from "../utils/utils";
+import * as events from './router.events';
+import * as observer from '../route/route.observer';
+import routeProvider from '../route/route.provider';
+import * as utils from '../utils/utils';
 
 class Router {
   constructor(rootElement, view) {
@@ -13,7 +13,7 @@ class Router {
     utils.setView(view);
   }
 
-  public config(callback:(routeProvider: RouteInterface.RouteProvider) => void): void {
+  public config(callback: (routeProvider: RouteInterface.RouteProvider) => void): void {
     callback(routeProvider);
 
     events.register();
