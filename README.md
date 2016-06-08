@@ -93,6 +93,7 @@ Type: `function`, Parameters: `string`, creates a new router with the given sele
      Object properties:
 
      - `templateUrl` Type: `string`, a relative path where to find the template that should load when a path is matched.
+     - `cache` Type: `string`, `default`: `false`, if set to `true` will cache the template for that route, and load the template from a cache instead.
      - `onLoad` Type: `function`, a function that is invoked after the template has been loaded into the view. The function has its own parameters: `rootElement`, `location`.
 
      1. onLoad rootElement - Type: `object`, the root element of the app.

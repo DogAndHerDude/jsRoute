@@ -73,6 +73,7 @@ function findMatch(next, callback): void {
 }
 
 function addRoute(route): void {
+  route.options.cache = !route.options.cache ? false : true;
   routes.push(route);
 }
 
