@@ -24,13 +24,13 @@ class $Location {
     let protocol: RegExpMatchArray = url.match(utils.protocolRegex);
     let search: RegExpMatchArray = url.match(/^\?*$/);
 
-    this.hash = typeof hash === 'object' ? hash[0] : '';
-    this.host = typeof host === 'object' ? host[0] : window.location.host;
+    this.hash = hash ? hash[0] : '';
+    this.host = host ? host[0] : window.location.host;
     this.hostname = this.host.match(/\w+/)[0];
-    this.protocol = typeof protocol === 'object' ? protocol[0].replace('//', '') : window.location.protocol;
+    this.protocol = protocol ? protocol[0].replace('//', '') : window.location.protocol;
     this.origin = `${this.protocol}//${this.host}`;
     this.pathname = url.replace(this.protocol + '//', '').replace(this.host, '');
-    this.search = typeof search === 'object' ? search[0] : '';
+    this.search = search ? search[0] : '';
     this.href = `${this.origin}${this.pathname}`;
     this.matchingPath = '';
   }

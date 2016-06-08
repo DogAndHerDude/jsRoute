@@ -7,6 +7,7 @@
     routeProvider
       .when('/', {
         templateUrl: '/views/main.view.html',
+        cache: true,
         onLoad: function(rootElement, location) {
           var nextViewButton = rootElement.querySelector('.next-view');
 
@@ -26,7 +27,7 @@
       .when('/page2', {
         templateUrl: '/views/page.view.html',
         onLoad: function(rootElement, location) {
-          
+
         }
       }).otherwise('/');
   });

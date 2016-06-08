@@ -79,7 +79,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: 'dist/',
-            src: ['jsRoute.min.js'],
+            src: ['jsRoute.min.js', 'jsRoute.js'],
             dest: 'example/'
           }
         ]
@@ -132,7 +132,7 @@ module.exports = function(grunt) {
       },
       local_dependencies: {
         files: {
-          'example/index.html': ['example/*.js', 'example/styles/*.css']
+          'example/index.html': ['example/*.(!min).js', 'example/styles/*.css']
         }
       }
     },

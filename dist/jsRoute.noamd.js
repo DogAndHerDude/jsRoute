@@ -74,13 +74,13 @@
             var host = url.match(utils.hostRegex);
             var protocol = url.match(utils.protocolRegex);
             var search = url.match(/^\?*$/);
-            this.hash = typeof hash === 'object' ? hash[0] : '';
-            this.host = typeof host === 'object' ? host[0] : window.location.host;
+            this.hash = hash ? hash[0] : '';
+            this.host = host ? host[0] : window.location.host;
             this.hostname = this.host.match(/\w+/)[0];
-            this.protocol = typeof protocol === 'object' ? protocol[0].replace('//', '') : window.location.protocol;
+            this.protocol = protocol ? protocol[0].replace('//', '') : window.location.protocol;
             this.origin = this.protocol + "//" + this.host;
             this.pathname = url.replace(this.protocol + '//', '').replace(this.host, '');
-            this.search = typeof search === 'object' ? search[0] : '';
+            this.search = search ? search[0] : '';
             this.href = "" + this.origin + this.pathname;
             this.matchingPath = '';
         }
@@ -219,10 +219,33 @@
     var $history = require('../history/history');
     var routes = [];
     var fallback = "/";
-    var pageIndex = 0;
     function monitorRouteChange() {
         var root = utils.getRoot();
         root.addEventListener('routeChange', changeCallback, false);
+    }
+    function insertTemplate(route, callback) {
+        var isCached = route.isCached();
+        var view = utils.getView();
+        if (!isCached) {
+            http_1.default.get(route.options.templateUrl, function (err, data) {
+                if (err)
+                    return callback(err);
+                if (!data)
+                    return callback();
+                view.innerHTML = data;
+                if (route.options.cache) {
+                    if (!isCached) {
+                        route.storeTemplateToCache(data);
+                    }
+                }
+                return callback(null, true);
+            });
+        }
+        else {
+            view.innerHTML = route.getCachedTemplate();
+            console.log('Cached template loaded');
+            return callback(null, true);
+        }
     }
     function changeCallback(ev) {
         if (!ev.defaultPrevented) {
@@ -235,10 +258,12 @@
                     return next.path(fallback);
                 $history.push(match, next.pathname);
                 next.matchingPath = match.path;
-                http_1.default.get(match.options.templateUrl, function (err, data) {
-                    var view = utils.getView();
-                    next.params = match.getParams(next.pathname);
-                    view.innerHTML = data;
+                next.params = match.getParams(next.pathname);
+                insertTemplate(match, function (err, success) {
+                    if (err)
+                        return console.error(err);
+                    if (!success)
+                        return console.info('No template retrieved from templateUrl');
                     if (match.options.onLoad)
                         match.options.onLoad(utils.getRoot(), next);
                 });
@@ -279,15 +304,14 @@
     "use strict";
     var Route = (function () {
         function Route(path, options) {
-            var self = this;
-            self.path = path;
-            self.options = options;
+            this.cachedTemplate = null;
+            this.path = path;
+            this.options = options;
         }
         Route.prototype.matchRoute = function (nextPath) {
-            var self = this;
             var splitNext = nextPath.split('/');
-            var splitRoute = self.path.split('/');
-            if (nextPath === '/' && nextPath === self.path)
+            var splitRoute = this.path.split('/');
+            if (nextPath === '/' && nextPath === this.path)
                 return true;
             if (splitRoute.length !== splitNext.length)
                 return false;
@@ -300,9 +324,8 @@
             return true;
         };
         Route.prototype.getParams = function (path) {
-            var self = this;
             var splitPath = path.split('/');
-            var splitRoute = self.path.split('/');
+            var splitRoute = this.path.split('/');
             var params = {};
             for (var i = 1, ii = splitRoute.length; i < ii; i++) {
                 var rgxParam = /:\w+/;
@@ -312,6 +335,15 @@
                 }
             }
             return params;
+        };
+        Route.prototype.isCached = function () {
+            return this.cachedTemplate ? true : false;
+        };
+        Route.prototype.storeTemplateToCache = function (template) {
+            this.cachedTemplate = template;
+        };
+        Route.prototype.getCachedTemplate = function () {
+            return this.cachedTemplate;
         };
         return Route;
     }());

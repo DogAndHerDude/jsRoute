@@ -1,29 +1,22 @@
 "use strict";
 
-interface RouteOptions {
-  templateUrl: string;
-  template: string;
-  onLoad(callback: (location: Object) => void): void;
-  matchRoute(route: Object): void;
-}
+import RouteInterface from '../typings/route/route.d';
 
 class Route {
   public path: string;
-  public options: RouteOptions;
+  public options: RouteInterface.RouteOptions;
+  private cachedTemplate: string | void = null
 
-  constructor(path: string, options: RouteOptions) {
-    var self = this;
-
-    self.path = path;
-    self.options = options;
+  constructor(path: string, options: RouteInterface.RouteOptions) {
+    this.path = path;
+    this.options = options;
   }
 
   public matchRoute(nextPath: string): boolean {
-    var self = this;
     var splitNext = nextPath.split('/');
-    var splitRoute = self.path.split('/');
+    var splitRoute = this.path.split('/');
 
-    if(nextPath === '/' && nextPath === self.path) return true;
+    if(nextPath === '/' && nextPath === this.path) return true;
     if(splitRoute.length !== splitNext.length) return false;
 
     for(var i = 1, ii = splitRoute.length; i < ii; i++) {
@@ -37,9 +30,8 @@ class Route {
   }
 
   public getParams(path: string): Object {
-    var self = this;
     var splitPath = path.split('/');
-    var splitRoute = self.path.split('/');
+    var splitRoute = this.path.split('/');
     var params = {};
 
     for(var i = 1, ii = splitRoute.length; i < ii; i++) {
@@ -53,7 +45,18 @@ class Route {
 
     return params;
   }
+
+  public isCached(): boolean {
+    return this.cachedTemplate ? true : false;
+  }
+
+  public storeTemplateToCache(template: string | void): void {
+    this.cachedTemplate = template;
+  }
+
+  public getCachedTemplate(): string | void {
+    return this.cachedTemplate;
+  }
 }
 
-export { RouteOptions };
 export { Route };

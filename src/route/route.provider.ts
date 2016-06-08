@@ -1,15 +1,12 @@
 'use strict';
 
-import { Route, RouteOptions } from "./route.model";
+import RouteInterface from '../typings/route/route.d';
+
+import { Route } from "./route.model";
 import * as observer from "./route.observer";
 
-interface Provider {
-  when(path: string, options: RouteOptions): Object;
-  otherwise(path: string): Object;
-}
-
-var provider: Provider = {
-  when(path, options) {
+var provider: RouteInterface.RouteProvider = {
+  when(path, options): RouteInterface.RouteProvider {
     let route = new Route(path, options);
 
     observer.addRoute(route);
@@ -17,7 +14,7 @@ var provider: Provider = {
     return this;
   },
 
-  otherwise(path) {
+  otherwise(path): RouteInterface.RouteProvider {
     observer.addFallback(path);
 
     return this;
