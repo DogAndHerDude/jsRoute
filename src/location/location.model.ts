@@ -1,24 +1,12 @@
 "use strict";
 
+import LocationInterface from '../typings/location/location.d';
+
 import * as utils from '../utils/utils';
 import * as eventHandler from "../events/eventHandler";
 import { startRouteChange } from "../router/router.events";
 
-interface LocationInterface {
-  protocol: string;
-  host: string;
-  href: string;
-  pathname: string;
-  hash: string;
-  origin: string;
-  search: string;
-  hostname: string;
-  matchingPath: string;
-  params: Object;
-  path(pathString: string): void;
-}
-
-class $Location implements LocationInterface {
+class $Location {
   public hash: string;
   public host: string;
   public hostname: string;
@@ -30,31 +18,19 @@ class $Location implements LocationInterface {
   public matchingPath: string;
   public params: Object = {};
 
-  constructor(url) {
-    this.hash = url.match(/^#*\?|$/) || '';
+  constructor(url: string) {
+    let hash: RegExpMatchArray = url.match(/^#*\?|$/);
+    let host: RegExpMatchArray = url.match(utils.hostRegex);
+    let protocol: RegExpMatchArray = url.match(utils.protocolRegex);
+    let search: RegExpMatchArray = url.match(/^\?*$/);
 
-    if(typeof this.hash === 'object') {
-      this.hash = this.hash[0];
-    }
-
-    this.host = url.match(utils.hostRegex) || window.location.host;
-
-    if(typeof this.host === 'object') {
-      this.host = this.host[0];
-    }
-
+    this.hash = typeof hash === 'object' ? hash[0] : '';
+    this.host = typeof host === 'object' ? host[0] : window.location.host;
     this.hostname = this.host.match(/\w+/)[0];
-
-    this.protocol = url.match(utils.protocolRegex) || window.location.protocol;
-
-    if(typeof this.protocol === 'object') {
-      this.protocol = this.protocol[0];
-      this.protocol = this.protocol.replace('//', '');
-    }
-
+    this.protocol = typeof protocol === 'object' ? protocol[0].replace('//', '') : window.location.protocol;
     this.origin = `${this.protocol}//${this.host}`;
     this.pathname = url.replace(this.protocol + '//', '').replace(this.host, '');
-    this.search = url.match(/^\?*$/) || '';
+    this.search = typeof search === 'object' ? search[0] : '';
     this.href = `${this.origin}${this.pathname}`;
     this.matchingPath = '';
   }
@@ -64,12 +40,13 @@ class $Location implements LocationInterface {
   }
 }
 
-function constructRoute(href) {
-  var prev = window.location;
-  var next = new $Location(href);
+function constructRoute(url: string): LocationInterface.LocationList {
+  var prev: Location = window.location;
+  var next: LocationInterface.NewLocation = new $Location(url);
+  var locationList: LocationInterface.LocationList = { next, prev };
 
-  return { next, prev };
+  return locationList;
 }
 
 export { constructRoute };
-export { $Location }
+export { $Location };

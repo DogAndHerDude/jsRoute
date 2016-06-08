@@ -70,23 +70,17 @@
     var $Location = (function () {
         function $Location(url) {
             this.params = {};
-            this.hash = url.match(/^#*\?|$/) || '';
-            if (typeof this.hash === 'object') {
-                this.hash = this.hash[0];
-            }
-            this.host = url.match(utils.hostRegex) || window.location.host;
-            if (typeof this.host === 'object') {
-                this.host = this.host[0];
-            }
+            var hash = url.match(/^#*\?|$/);
+            var host = url.match(utils.hostRegex);
+            var protocol = url.match(utils.protocolRegex);
+            var search = url.match(/^\?*$/);
+            this.hash = typeof hash === 'object' ? hash[0] : '';
+            this.host = typeof host === 'object' ? host[0] : window.location.host;
             this.hostname = this.host.match(/\w+/)[0];
-            this.protocol = url.match(utils.protocolRegex) || window.location.protocol;
-            if (typeof this.protocol === 'object') {
-                this.protocol = this.protocol[0];
-                this.protocol = this.protocol.replace('//', '');
-            }
+            this.protocol = typeof protocol === 'object' ? protocol[0].replace('//', '') : window.location.protocol;
             this.origin = this.protocol + "//" + this.host;
             this.pathname = url.replace(this.protocol + '//', '').replace(this.host, '');
-            this.search = url.match(/^\?*$/) || '';
+            this.search = typeof search === 'object' ? search[0] : '';
             this.href = "" + this.origin + this.pathname;
             this.matchingPath = '';
         }
@@ -96,10 +90,11 @@
         return $Location;
     }());
     exports.$Location = $Location;
-    function constructRoute(href) {
+    function constructRoute(url) {
         var prev = window.location;
-        var next = new $Location(href);
-        return { next: next, prev: prev };
+        var next = new $Location(url);
+        var locationList = { next: next, prev: prev };
+        return locationList;
     }
     exports.constructRoute = constructRoute;
 });
@@ -109,26 +104,27 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('router/router.events',["require", "exports", "../events/eventHandler", "../location/location.model", "../utils/utils"], factory);
+        define('router/router.events',["require", "exports", '../events/eventHandler', '../location/location.model', '../utils/utils'], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    var eventHandler = require("../events/eventHandler");
-    var location_model_1 = require("../location/location.model");
-    var utils = require("../utils/utils");
+    'use strict';
+    var eventHandler = require('../events/eventHandler');
+    var location_model_1 = require('../location/location.model');
+    var utils = require('../utils/utils');
     function onRun() {
         startRouteChange(location_model_1.constructRoute(window.location.origin + window.location.pathname));
     }
     exports.onRun = onRun;
     function startRouteChange(location) {
         var root = utils.getRoot();
-        eventHandler.broadcastEvent("routeChange", root, { detail: location });
+        var locationList = location;
+        eventHandler.broadcastEvent('routeChange', root, { detail: locationList });
     }
     exports.startRouteChange = startRouteChange;
     function interceptLinks() {
         var root = utils.getRoot();
         root.addEventListener('click', function (ev) {
-            if (ev.target.nodeName === "A") {
+            if (ev.target.nodeName === 'A') {
                 ev.preventDefault();
                 startRouteChange(location_model_1.constructRoute(ev.target.href));
             }

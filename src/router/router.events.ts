@@ -1,8 +1,10 @@
-"use strict";
+'use strict';
 
-import * as eventHandler from "../events/eventHandler";
-import { constructRoute } from "../location/location.model";
-import * as utils from "../utils/utils";
+import LocationInterface from '../typings/location/location.d';
+
+import * as eventHandler from '../events/eventHandler';
+import { constructRoute } from '../location/location.model';
+import * as utils from '../utils/utils';
 
 function onRun() {
   // Determine current route and load the template based on it
@@ -11,14 +13,16 @@ function onRun() {
 
 function startRouteChange(location) {
   var root = utils.getRoot();
-  eventHandler.broadcastEvent("routeChange", root, { detail: location });
+  var locationList: LocationInterface.LocationList = location;
+
+  eventHandler.broadcastEvent('routeChange', root, { detail: locationList });
 }
 
 function interceptLinks() {
   var root = utils.getRoot();
 
   root.addEventListener('click', (ev) => {
-    if(ev.target.nodeName === "A") {
+    if(ev.target.nodeName === 'A') {
       ev.preventDefault();
       // Start route matching and change
       startRouteChange(constructRoute(ev.target.href));
