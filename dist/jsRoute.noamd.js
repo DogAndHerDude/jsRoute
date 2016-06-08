@@ -280,6 +280,7 @@
         return callback();
     }
     function addRoute(route) {
+        route.options.cache = !route.options.cache ? false : true;
         routes.push(route);
     }
     exports.addRoute = addRoute;

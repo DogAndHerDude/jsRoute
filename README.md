@@ -140,6 +140,7 @@ Type: `function`, Parameters: `string`, creates a new router with the given sele
 
 # TODO
 
-1. Write documentation
+1. Write a better documentation
 2. Write tests
 3. Add page transition support
+4. Improve route pattern support
