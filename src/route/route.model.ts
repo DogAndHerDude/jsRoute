@@ -11,7 +11,7 @@ class Route {
     this.path = path;
     this.options = options;
   }
-
+  
   public matchRoute(nextPath: string): boolean {
     var splitNext = nextPath.split('/');
     var splitRoute = this.path.split('/');

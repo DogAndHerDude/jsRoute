@@ -6,15 +6,15 @@ import { Route } from "./route.model";
 import * as observer from "./route.observer";
 
 var provider: RouteInterface.RouteProvider = {
-  when(path, options): RouteInterface.RouteProvider {
-    let route = new Route(path, options);
+  when(path: string, options: RouteInterface.RouteOptions): RouteInterface.RouteProvider {
+    let route: Route = new Route(path, options);
 
     observer.addRoute(route);
 
     return this;
   },
 
-  otherwise(path): RouteInterface.RouteProvider {
+  otherwise(path: string): RouteInterface.RouteProvider {
     observer.addFallback(path);
 
     return this;

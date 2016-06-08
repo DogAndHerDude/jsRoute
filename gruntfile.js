@@ -66,6 +66,7 @@ module.exports = function(grunt) {
 
     uglify: {
       target: {
+        preserveComments: false,
         files: {
           'dist/jsRoute.min.js': ['dist/jsRoute.js'],
           'dist/jsRoute.noamd.min.js': ['dist/jsRoute.noamd.js']

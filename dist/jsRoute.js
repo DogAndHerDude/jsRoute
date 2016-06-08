@@ -610,17 +610,13 @@ define("../node_modules/almond/almond", function(){});
     'use strict';
     var router_events_1 = require('../router/router.events');
     var location_model_1 = require('../location/location.model');
-    var $history = [];
-    var $$history = window.history;
-    var currentIndex = -1;
+    var $history = window.history;
     var popStateInvoked = false;
     function push(route, pathname) {
         var splitTemplate = route.options.templateUrl.split('/');
         var templateName = splitTemplate.pop();
         if (!popStateInvoked) {
-            $history.push(pathname);
-            currentIndex = $history.length - 1;
-            $$history.pushState({ path: pathname }, templateName, pathname);
+            $history.pushState({ path: pathname }, templateName, pathname);
         }
         popStateInvoked = false;
     }
@@ -673,7 +669,6 @@ define("../node_modules/almond/almond", function(){});
         }
         else {
             view.innerHTML = route.getCachedTemplate();
-            console.log('Cached template loaded');
             return callback(null, true);
         }
     }
