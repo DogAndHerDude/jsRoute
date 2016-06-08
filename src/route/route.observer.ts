@@ -25,10 +25,8 @@ function insertTemplate(route: routeModel.Route, callback): void {
 
       view.innerHTML = data;
 
-      if (route.options.cache) {
-        if (!isCached) {
-          route.storeTemplateToCache(data);
-        }
+      if (route.options.cache && !isCached) {
+        route.storeTemplateToCache(data);
       }
 
       return callback(null, true);
