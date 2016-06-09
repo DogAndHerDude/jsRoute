@@ -2,7 +2,7 @@
 
 import RouteInterface from '../typings/route/route.d';
 
-import { Route } from './route.model';
+import Route from './route.model';
 import * as observer from './route.observer';
 
 var provider: RouteInterface.RouteProvider = {

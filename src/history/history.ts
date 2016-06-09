@@ -1,7 +1,7 @@
 'use strict';
 
 import { startRouteChange } from '../router/router.events';
-import { constructRoute } from '../location/location.model';
+import routeFactory from '../location/location.model';
 
 var $history = window.history;
 var popStateInvoked = false;
@@ -21,7 +21,7 @@ function monitorBrowserNavigation() {
   window.addEventListener('popstate', (ev) => {
     ev.preventDefault();
     popStateInvoked = true;
-    startRouteChange(constructRoute(ev.state.path));
+    startRouteChange(routeFactory(ev.state.path));
   });
 }
 

@@ -59,4 +59,4 @@ class Route {
   }
 }
 
-export { Route };
+export default Route;

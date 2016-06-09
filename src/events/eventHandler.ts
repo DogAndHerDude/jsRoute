@@ -10,4 +10,4 @@ function broadcastEvent(eventName: string, element, eventData): void {
   element.dispatchEvent(_event);
 }
 
-export { broadcastEvent };
+export default broadcastEvent;

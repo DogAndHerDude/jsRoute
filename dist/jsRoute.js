@@ -443,7 +443,8 @@ define("../node_modules/almond/almond", function(){});
         _event = new CustomEvent(eventName, eventData);
         element.dispatchEvent(_event);
     }
-    exports.broadcastEvent = broadcastEvent;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = broadcastEvent;
 });
 //# sourceMappingURL=../../src/tmp/maps/events/eventHandler.js.map;
 (function (factory) {
@@ -514,18 +515,18 @@ define("../node_modules/almond/almond", function(){});
             this.matchingPath = '';
         }
         $Location.prototype.path = function (href) {
-            router_events_1.startRouteChange(constructRoute(href));
+            router_events_1.startRouteChange(routeFactory(href));
         };
         return $Location;
     }());
-    exports.$Location = $Location;
-    function constructRoute(url) {
+    function routeFactory(url) {
         var prev = window.location;
         var next = new $Location(url);
         var locationList = { next: next, prev: prev };
         return locationList;
     }
-    exports.constructRoute = constructRoute;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = routeFactory;
 });
 //# sourceMappingURL=../../src/tmp/maps/location/location.model.js.map;
 (function (factory) {
@@ -537,17 +538,17 @@ define("../node_modules/almond/almond", function(){});
     }
 })(function (require, exports) {
     'use strict';
-    var eventHandler = require('../events/eventHandler');
+    var eventHandler_1 = require('../events/eventHandler');
     var location_model_1 = require('../location/location.model');
     var utils = require('../utils/utils');
     function onRun() {
-        startRouteChange(location_model_1.constructRoute(window.location.origin + window.location.pathname));
+        startRouteChange(location_model_1.default(window.location.origin + window.location.pathname));
     }
     exports.onRun = onRun;
     function startRouteChange(location) {
         var root = utils.getRoot();
         var locationList = location;
-        eventHandler.broadcastEvent('routeChange', root, { detail: locationList });
+        eventHandler_1.default('routeChange', root, { detail: locationList });
     }
     exports.startRouteChange = startRouteChange;
     function interceptLinks() {
@@ -555,7 +556,7 @@ define("../node_modules/almond/almond", function(){});
         root.addEventListener('click', function (ev) {
             if (ev.target.nodeName === 'A') {
                 ev.preventDefault();
-                startRouteChange(location_model_1.constructRoute(ev.target.href));
+                startRouteChange(location_model_1.default(ev.target.href));
             }
         });
     }
@@ -624,7 +625,7 @@ define("../node_modules/almond/almond", function(){});
         window.addEventListener('popstate', function (ev) {
             ev.preventDefault();
             popStateInvoked = true;
-            router_events_1.startRouteChange(location_model_1.constructRoute(ev.state.path));
+            router_events_1.startRouteChange(location_model_1.default(ev.state.path));
         });
     }
     exports.monitorBrowserNavigation = monitorBrowserNavigation;
@@ -660,10 +661,8 @@ define("../node_modules/almond/almond", function(){});
                     return callback();
                 }
                 view.innerHTML = data;
-                if (route.options.cache) {
-                    if (!isCached) {
-                        route.storeTemplateToCache(data);
-                    }
+                if (route.options.cache && !isCached) {
+                    route.storeTemplateToCache(data);
                 }
                 return callback(null, true);
             });
@@ -782,7 +781,8 @@ define("../node_modules/almond/almond", function(){});
         };
         return Route;
     }());
-    exports.Route = Route;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = Route;
 });
 //# sourceMappingURL=../../src/tmp/maps/route/route.model.js.map;
 (function (factory) {
@@ -798,7 +798,7 @@ define("../node_modules/almond/almond", function(){});
     var observer = require('./route.observer');
     var provider = {
         when: function (path, options) {
-            var route = new route_model_1.Route(path, options);
+            var route = new route_model_1.default(path, options);
             observer.addRoute(route);
             return this;
         },

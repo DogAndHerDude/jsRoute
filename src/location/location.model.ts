@@ -35,11 +35,11 @@ class $Location {
   }
 
   public path(href: string): void {
-    startRouteChange(constructRoute(href));
+    startRouteChange(routeFactory(href));
   }
 }
 
-function constructRoute(url: string): LocationInterface.LocationList {
+function routeFactory(url: string): LocationInterface.LocationList {
   var prev: Location = window.location;
   var next: LocationInterface.NewLocation = new $Location(url);
   var locationList: LocationInterface.LocationList = { next, prev };
@@ -47,5 +47,4 @@ function constructRoute(url: string): LocationInterface.LocationList {
   return locationList;
 }
 
-export { constructRoute };
-export { $Location };
+export default routeFactory;

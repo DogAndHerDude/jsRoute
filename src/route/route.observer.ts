@@ -1,11 +1,11 @@
 'use strict';
 
-import * as routeModel from './route.model';
+import Route from './route.model';
 import * as utils from '../utils/utils';
 import $http from '../http/http';
 import * as $history from '../history/history';
 
-var routes: Array<routeModel.Route> = [];
+var routes: Array<Route> = [];
 var fallback = '/';
 
 function monitorRouteChange(): void {
@@ -14,7 +14,7 @@ function monitorRouteChange(): void {
   root.addEventListener('routeChange', changeCallback, false);
 }
 
-function insertTemplate(route: routeModel.Route, callback): void {
+function insertTemplate(route: Route, callback): void {
   const isCached = route.isCached();
   var view = utils.getView();
 
