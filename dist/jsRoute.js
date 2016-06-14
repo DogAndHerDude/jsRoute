@@ -654,9 +654,9 @@ define("../node_modules/almond/almond", function(){});
         root.addEventListener('routeChange', changeCallback, false);
     }
     function insertTemplate(route, callback) {
-        var isCached = route.isCached();
+        var cachedTemplate = route.getCachedTemplate();
         var view = utils.getView();
-        if (!isCached) {
+        if (!cachedTemplate) {
             http_1.default.get(route.options.templateUrl, function (err, data) {
                 if (err) {
                     return callback(err);
@@ -665,14 +665,14 @@ define("../node_modules/almond/almond", function(){});
                     return callback();
                 }
                 view.innerHTML = data;
-                if (route.options.cache && !isCached) {
-                    route.storeTemplateToCache(data);
+                if (route.options.cache && !cachedTemplate) {
+                    route.setCachedTemplate(data);
                 }
                 return callback(null, true);
             });
         }
         else {
-            view.innerHTML = route.getCachedTemplate();
+            view.innerHTML = cachedTemplate;
             return callback(null, true);
         }
     }
@@ -774,14 +774,11 @@ define("../node_modules/almond/almond", function(){});
             }
             return params;
         };
-        Route.prototype.isCached = function () {
-            return this.cachedTemplate ? true : false;
-        };
-        Route.prototype.storeTemplateToCache = function (template) {
-            this.cachedTemplate = template;
-        };
         Route.prototype.getCachedTemplate = function () {
             return this.cachedTemplate;
+        };
+        Route.prototype.setCachedTemplate = function (template) {
+            this.cachedTemplate = template;
         };
         return Route;
     }());

@@ -15,24 +15,24 @@ function monitorRouteChange(): void {
 }
 
 function insertTemplate(route: Route, callback): void {
-  const isCached = route.isCached();
+  const cachedTemplate = route.getCachedTemplate();
   var view = utils.getView();
 
-  if (!isCached) {
+  if (!cachedTemplate) {
     $http.get(route.options.templateUrl, (err, data) => {
       if (err) { return callback(err); }
       if (!data) { return callback(); }
 
       view.innerHTML = data;
 
-      if (route.options.cache && !isCached) {
-        route.storeTemplateToCache(data);
+      if (route.options.cache && !cachedTemplate) {
+        route.setCachedTemplate(data);
       }
 
       return callback(null, true);
     });
   } else {
-    view.innerHTML = route.getCachedTemplate();
+    view.innerHTML = cachedTemplate;
     return callback(null, true);
   }
 }

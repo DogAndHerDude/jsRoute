@@ -46,16 +46,12 @@ class Route {
     return params;
   }
 
-  public isCached(): boolean {
-    return this.cachedTemplate ? true : false;
-  }
-
-  public storeTemplateToCache(template: string | void): void {
-    this.cachedTemplate = template;
-  }
-
   public getCachedTemplate(): string | void {
     return this.cachedTemplate;
+  }
+
+  public setCachedTemplate(template: string | void) {
+    this.cachedTemplate = template;
   }
 }
 
