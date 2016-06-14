@@ -542,6 +542,10 @@ define("../node_modules/almond/almond", function(){});
     var location_model_1 = require('../location/location.model');
     var utils = require('../utils/utils');
     function onRun() {
+        var view = utils.getView();
+        if (view.children.length) {
+            return;
+        }
         startRouteChange(location_model_1.default(window.location.origin + window.location.pathname));
     }
     exports.onRun = onRun;

@@ -7,7 +7,9 @@ import routeFactory from '../location/location.model';
 import * as utils from '../utils/utils';
 
 function onRun() {
+  let view = utils.getView();
   // Determine current route and load the template based on it
+  if (view.children.length) { return; }
   startRouteChange(routeFactory(window.location.origin + window.location.pathname));
 }
 
