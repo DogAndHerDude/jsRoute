@@ -3,7 +3,7 @@
 import LocationInterface from '../typings/location/location.d';
 import LocationModel from './location.model';
 
-var currentLocation;
+var currentLocation: LocationInterface.LocationModel;
 
 function createRouteList(url: string) {
   let prev = {
@@ -18,7 +18,7 @@ function createRouteList(url: string) {
   return { prev, next };
 }
 
-function locationFactory(url: string): LocationInterface.NewLocation {
+function locationFactory(url: string): LocationInterface.LocationModel {
   let nextLocation = new LocationModel(url);
 
   currentLocation = nextLocation;
@@ -26,11 +26,11 @@ function locationFactory(url: string): LocationInterface.NewLocation {
   return nextLocation;
 }
 
-function getCurrentLocation() {
+function getCurrentLocation(): LocationInterface.LocationModel {
   return currentLocation;
 }
 
-function setCurrentLocation($location) {
+function setCurrentLocation($location): void {
   currentLocation = $location;
 }
 

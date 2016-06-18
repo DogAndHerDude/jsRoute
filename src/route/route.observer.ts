@@ -47,7 +47,7 @@ function startChange(ev): void {
   let nextLocation = locationFactory(routeList.next.path);
 
   if (prevLocation && (prevLocation.host !== nextLocation.host)) {
-    window.location.assign(nextLocation.href);
+    return window.location.assign(nextLocation.href);
   }
 
   findMatch(nextLocation, (match) => {

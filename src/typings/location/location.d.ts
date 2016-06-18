@@ -1,10 +1,6 @@
 
 declare namespace LocationInterface {
-    interface NewLocationConstructor {
-      new(url: string);
-    }
-
-    export interface NewLocation {
+    export interface LocationModel {
       protocol: string;
       host: string;
       href: string;
@@ -16,11 +12,6 @@ declare namespace LocationInterface {
       matchingPath: string;
       params: Object;
       path(pathString: string): void;
-    }
-
-    export interface RouteList {
-      prev: Location;
-      next: NewLocation;
     }
 }
 

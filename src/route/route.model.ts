@@ -7,7 +7,7 @@ class RouteOptions implements RouteInterface.RouteOptions {
   public templateUrl: string | void = null;
   public template: string | void = null;
   public cache: boolean = false;
-  public onLoad: (rootElement: Object, location: LocationInterface.NewLocation) => void | void = null;
+  public onLoad: (rootElement: Object, location: LocationInterface.LocationModel) => void | void = null;
 
   constructor(options: RouteInterface.RouteOptions) {
     this.templateUrl = options.templateUrl ? options.templateUrl : this.templateUrl;

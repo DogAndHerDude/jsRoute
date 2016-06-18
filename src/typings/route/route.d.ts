@@ -5,7 +5,7 @@ declare namespace RouteInterface {
     templateUrl: string | void;
     template: string | void;
     cache: boolean;
-    onLoad: (rootElement: Object, location: LocationInterface.NewLocation) => void;
+    onLoad: (rootElement: Object, location: LocationInterface.LocationModel) => void;
   }
 
   export interface RouteProvider {

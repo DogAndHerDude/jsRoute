@@ -26,7 +26,6 @@ function interceptLinks() {
     if (ev.target.nodeName === 'A') {
       ev.preventDefault();
       // Start route matching and change
-      //startRouteChange(routeFactory(ev.target.href));
       startRouteChange(ev.target.href);
     }
   });

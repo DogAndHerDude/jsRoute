@@ -299,7 +299,7 @@
         var prevLocation = location_factory_1.getCurrentLocation();
         var nextLocation = location_factory_1.locationFactory(routeList.next.path);
         if (prevLocation && (prevLocation.host !== nextLocation.host)) {
-            window.location.assign(nextLocation.href);
+            return window.location.assign(nextLocation.href);
         }
         findMatch(nextLocation, function (match) {
             if (!match) {
