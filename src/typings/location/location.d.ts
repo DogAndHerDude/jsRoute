@@ -18,7 +18,7 @@ declare namespace LocationInterface {
       path(pathString: string): void;
     }
 
-    export interface LocationList {
+    export interface RouteList {
       prev: Location;
       next: NewLocation;
     }

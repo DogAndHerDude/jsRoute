@@ -1,11 +1,9 @@
 'use strict';
 
-import LocationInterface from '../typings/location/location.d';
-
 import * as utils from '../utils/utils';
 import { startRouteChange } from '../router/router.events';
 
-class $Location {
+export class LocationModel {
   public hash: string;
   public host: string;
   public hostname: string;
@@ -35,16 +33,8 @@ class $Location {
   }
 
   public path(href: string): void {
-    startRouteChange(routeFactory(href));
+    startRouteChange(href);
   }
 }
 
-function routeFactory(url: string): LocationInterface.LocationList {
-  var prev: Location = window.location;
-  var next: LocationInterface.NewLocation = new $Location(url);
-  var locationList: LocationInterface.LocationList = { next, prev };
-
-  return locationList;
-}
-
-export default routeFactory;
+export default LocationModel;

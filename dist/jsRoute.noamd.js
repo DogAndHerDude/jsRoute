@@ -67,8 +67,8 @@
     'use strict';
     var utils = require('../utils/utils');
     var router_events_1 = require('../router/router.events');
-    var $Location = (function () {
-        function $Location(url) {
+    var LocationModel = (function () {
+        function LocationModel(url) {
             this.params = {};
             var hash = url.match(/^#*\?|$/);
             var host = url.match(utils.hostRegex);
@@ -84,19 +84,14 @@
             this.href = "" + this.origin + this.pathname;
             this.matchingPath = '';
         }
-        $Location.prototype.path = function (href) {
-            router_events_1.startRouteChange(routeFactory(href));
+        LocationModel.prototype.path = function (href) {
+            router_events_1.startRouteChange(href);
         };
-        return $Location;
+        return LocationModel;
     }());
-    function routeFactory(url) {
-        var prev = window.location;
-        var next = new $Location(url);
-        var locationList = { next: next, prev: prev };
-        return locationList;
-    }
+    exports.LocationModel = LocationModel;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = routeFactory;
+    exports.default = LocationModel;
 });
 //# sourceMappingURL=../../src/tmp/maps/location/location.model.js.map;
 (function (factory) {
@@ -104,25 +99,64 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('router/router.events',["require", "exports", '../events/eventHandler', '../location/location.model', '../utils/utils'], factory);
+        define('location/location.factory',["require", "exports", './location.model'], factory);
+    }
+})(function (require, exports) {
+    'use strict';
+    var location_model_1 = require('./location.model');
+    var currentLocation;
+    function createRouteList(url) {
+        var prev = {
+            path: currentLocation ? currentLocation.pathname : null,
+            match: currentLocation ? currentLocation.matchingPath : null
+        };
+        var next = {
+            path: url,
+            match: null,
+        };
+        return { prev: prev, next: next };
+    }
+    exports.createRouteList = createRouteList;
+    function locationFactory(url) {
+        var nextLocation = new location_model_1.default(url);
+        currentLocation = nextLocation;
+        return nextLocation;
+    }
+    exports.locationFactory = locationFactory;
+    function getCurrentLocation() {
+        return currentLocation;
+    }
+    exports.getCurrentLocation = getCurrentLocation;
+    function setCurrentLocation($location) {
+        currentLocation = $location;
+    }
+    exports.setCurrentLocation = setCurrentLocation;
+});
+//# sourceMappingURL=../../src/tmp/maps/location/location.factory.js.map;
+(function (factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define('router/router.events',["require", "exports", '../events/eventHandler', '../location/location.factory', '../utils/utils'], factory);
     }
 })(function (require, exports) {
     'use strict';
     var eventHandler_1 = require('../events/eventHandler');
-    var location_model_1 = require('../location/location.model');
+    var location_factory_1 = require('../location/location.factory');
     var utils = require('../utils/utils');
     function onRun() {
         var view = utils.getView();
         if (view.children.length) {
             return;
         }
-        startRouteChange(location_model_1.default(window.location.origin + window.location.pathname));
+        startRouteChange(window.location.pathname);
     }
     exports.onRun = onRun;
-    function startRouteChange(location) {
+    function startRouteChange(url) {
         var root = utils.getRoot();
-        var locationList = location;
-        eventHandler_1.default('routeChange', root, { detail: locationList });
+        var routeList = location_factory_1.createRouteList(url);
+        eventHandler_1.default('routeChangeStart', root, { detail: routeList });
     }
     exports.startRouteChange = startRouteChange;
     function interceptLinks() {
@@ -130,10 +164,20 @@
         root.addEventListener('click', function (ev) {
             if (ev.target.nodeName === 'A') {
                 ev.preventDefault();
-                startRouteChange(location_model_1.default(ev.target.href));
+                startRouteChange(ev.target.href);
             }
         });
     }
+    function completeRouteChange(routeList) {
+        var root = utils.getRoot();
+        eventHandler_1.default('routeChangeSuccess', root, { detail: routeList });
+    }
+    exports.completeRouteChange = completeRouteChange;
+    function failRouteChange(routeList) {
+        var root = utils.getRoot();
+        eventHandler_1.default('routeChangeError', root, { detail: routeList });
+    }
+    exports.failRouteChange = failRouteChange;
     function register() {
         interceptLinks();
     }
@@ -178,12 +222,11 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('history/history',["require", "exports", '../router/router.events', '../location/location.model'], factory);
+        define('history/history',["require", "exports", '../router/router.events'], factory);
     }
 })(function (require, exports) {
     'use strict';
     var router_events_1 = require('../router/router.events');
-    var location_model_1 = require('../location/location.model');
     var $history = window.history;
     var popStateInvoked = false;
     function push(route, pathname) {
@@ -199,7 +242,7 @@
         window.addEventListener('popstate', function (ev) {
             ev.preventDefault();
             popStateInvoked = true;
-            router_events_1.startRouteChange(location_model_1.default(ev.state.path));
+            router_events_1.startRouteChange(ev.state.path);
         });
     }
     exports.monitorBrowserNavigation = monitorBrowserNavigation;
@@ -210,20 +253,22 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define('route/route.observer',["require", "exports", '../utils/utils', '../http/http', '../history/history'], factory);
+        define('route/route.observer',["require", "exports", '../router/router.events', '../utils/utils', '../http/http', '../history/history', '../location/location.factory'], factory);
     }
 })(function (require, exports) {
     'use strict';
+    var router_events_1 = require('../router/router.events');
     var utils = require('../utils/utils');
     var http_1 = require('../http/http');
     var $history = require('../history/history');
+    var location_factory_1 = require('../location/location.factory');
     var routes = [];
     var fallback = '/';
     function monitorRouteChange() {
         var root = utils.getRoot();
-        root.addEventListener('routeChange', changeCallback, false);
+        root.addEventListener('routeChangeStart', startChange, false);
     }
-    function insertTemplate(route, callback) {
+    function loadTemplate(route, callback) {
         var cachedTemplate = route.getCachedTemplate();
         var view = utils.getView();
         if (!cachedTemplate) {
@@ -246,33 +291,39 @@
             return callback(null, true);
         }
     }
-    function changeCallback(ev) {
-        if (!ev.defaultPrevented) {
-            var next = ev.detail.next;
-            var prev = ev.detail.prev;
-            if (next.host !== prev.host) {
-                window.location.assign(next.href);
-            }
-            findMatch(next, function (match) {
-                if (!match) {
-                    return next.path(fallback);
-                }
-                $history.push(match, next.pathname);
-                next.matchingPath = match.path;
-                next.params = match.getParams(next.pathname);
-                insertTemplate(match, function (err, success) {
-                    if (err) {
-                        return console.error(err);
-                    }
-                    if (!success) {
-                        return console.error('No template retrieved from templateUrl');
-                    }
-                    if (match.options.onLoad) {
-                        match.options.onLoad(utils.getRoot(), next);
-                    }
-                });
-            });
+    function startChange(ev) {
+        if (ev.defaultPrevented) {
+            return;
         }
+        var routeList = ev.detail;
+        var prevLocation = location_factory_1.getCurrentLocation();
+        var nextLocation = location_factory_1.locationFactory(routeList.next.path);
+        if (prevLocation && (prevLocation.host !== nextLocation.host)) {
+            window.location.assign(nextLocation.href);
+        }
+        findMatch(nextLocation, function (match) {
+            if (!match) {
+                return nextLocation.path(fallback);
+            }
+            loadTemplate(match, function (err, success) {
+                if (err) {
+                    return console.error(err);
+                }
+                if (!success) {
+                    routeList.err = 'Failed to retrieve template from templateUrl';
+                    router_events_1.failRouteChange(routeList);
+                    return console.error(routeList.err);
+                }
+                nextLocation.matchingPath = routeList.next.match = match.path;
+                nextLocation.params = match.getParams(nextLocation.pathname);
+                $history.push(match, nextLocation.pathname);
+                location_factory_1.setCurrentLocation(nextLocation);
+                if (match.options.onLoad) {
+                    match.options.onLoad(utils.getRoot(), nextLocation);
+                }
+                router_events_1.completeRouteChange(routeList);
+            });
+        });
     }
     function findMatch(next, callback) {
         for (var i = 0, ii = routes.length; i < ii; i++) {

@@ -1,9 +1,11 @@
 'use strict';
 
 import Route from './route.model';
+import { completeRouteChange, failRouteChange } from '../router/router.events';
 import * as utils from '../utils/utils';
 import $http from '../http/http';
 import * as $history from '../history/history';
+import { getCurrentLocation, setCurrentLocation, locationFactory } from '../location/location.factory';
 
 var routes: Array<Route> = [];
 var fallback = '/';
@@ -11,10 +13,10 @@ var fallback = '/';
 function monitorRouteChange(): void {
   let root = utils.getRoot();
 
-  root.addEventListener('routeChange', changeCallback, false);
+  root.addEventListener('routeChangeStart', startChange, false);
 }
 
-function insertTemplate(route: Route, callback): void {
+function loadTemplate(route: Route, callback): void {
   const cachedTemplate = route.getCachedTemplate();
   var view = utils.getView();
 
@@ -37,7 +39,42 @@ function insertTemplate(route: Route, callback): void {
   }
 }
 
-function changeCallback(ev): void {
+function startChange(ev): void {
+  if (ev.defaultPrevented) { return; }
+
+  let routeList = ev.detail;
+  let prevLocation = getCurrentLocation();
+  let nextLocation = locationFactory(routeList.next.path);
+
+  if (prevLocation && (prevLocation.host !== nextLocation.host)) {
+    window.location.assign(nextLocation.href);
+  }
+
+  findMatch(nextLocation, (match) => {
+    if (!match) { return nextLocation.path(fallback); }
+
+    loadTemplate(match, (err, success) => {
+      if (err) { return console.error(err); }
+      if (!success) {
+        routeList.err = 'Failed to retrieve template from templateUrl';
+        failRouteChange(routeList);
+        return console.error(routeList.err);
+      }
+
+      nextLocation.matchingPath = routeList.next.match = match.path;
+      nextLocation.params = match.getParams(nextLocation.pathname);
+
+      $history.push(match, nextLocation.pathname);
+      setCurrentLocation(nextLocation);
+
+      if (match.options.onLoad) { match.options.onLoad(utils.getRoot(), nextLocation); }
+
+      completeRouteChange(routeList);
+    });
+  });
+}
+
+/*function changeCallback(ev): void {
   if (!ev.defaultPrevented) {
     var next = ev.detail.next;
     var prev = ev.detail.prev;
@@ -51,14 +88,14 @@ function changeCallback(ev): void {
       next.matchingPath = match.path;
       next.params = match.getParams(next.pathname);
 
-      insertTemplate(match, (err, success) => {
+      loadTemplate(match, (err, success) => {
         if (err) { return console.error(err); }
         if (!success) { return console.error('No template retrieved from templateUrl'); }
         if (match.options.onLoad) { match.options.onLoad(utils.getRoot(), next); }
       });
     });
   }
-}
+}*/
 
 function findMatch(next, callback): void {
   for (let i = 0, ii = routes.length; i < ii; i++) {

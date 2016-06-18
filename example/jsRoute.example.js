@@ -18,10 +18,16 @@
         }
       }).when('/groups/:id', {
         templateUrl: '/views/groupSingle.view.html',
+        partial: '.partial-group',
         onLoad: function(rootElement, location) {
           var title = rootElement.querySelector('.group-name')
 
           title.innerHTML = title.innerHTML + ' ' + location.params.id;
+
+          rootElement.addEventListener('routeChangeSuccess', function(ev) {
+            console.log('Route change success');
+            console.log(ev.detail);
+          }, false);
         }
       })
       .when('/page2', {
