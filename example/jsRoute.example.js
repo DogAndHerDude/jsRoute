@@ -18,6 +18,7 @@
         }
       }).when('/groups/:id', {
         templateUrl: '/views/groupSingle.view.html',
+        partial: '.partial-group',
         onLoad: function(rootElement, location) {
           var title = rootElement.querySelector('.group-name')
 

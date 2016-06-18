@@ -14,9 +14,18 @@ function monitorRouteChange(): void {
   root.addEventListener('routeChange', changeCallback, false);
 }
 
+function setView(options) {
+  let view = utils.getView();
+  let partial = options.partial ? view.querySelector(options.partial) : null;
+
+  if (partial) { return partial; }
+
+  return view;
+}
+
 function insertTemplate(route: Route, callback): void {
   const cachedTemplate = route.getCachedTemplate();
-  var view = utils.getView();
+  var view = setView(route.options);
 
   if (!cachedTemplate) {
     $http.get(route.options.templateUrl, (err, data) => {

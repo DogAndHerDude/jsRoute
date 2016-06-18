@@ -653,9 +653,17 @@ define("../node_modules/almond/almond", function(){});
         var root = utils.getRoot();
         root.addEventListener('routeChange', changeCallback, false);
     }
+    function setView(options) {
+        var view = utils.getView();
+        var partial = options.partial ? view.querySelector(options.partial) : null;
+        if (partial) {
+            return partial;
+        }
+        return view;
+    }
     function insertTemplate(route, callback) {
         var cachedTemplate = route.getCachedTemplate();
-        var view = utils.getView();
+        var view = setView(route.options);
         if (!cachedTemplate) {
             http_1.default.get(route.options.templateUrl, function (err, data) {
                 if (err) {
