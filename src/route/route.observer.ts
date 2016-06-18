@@ -74,29 +74,6 @@ function startChange(ev): void {
   });
 }
 
-/*function changeCallback(ev): void {
-  if (!ev.defaultPrevented) {
-    var next = ev.detail.next;
-    var prev = ev.detail.prev;
-
-    //If host is not own site : redirect
-    if (next.host !== prev.host) { window.location.assign(next.href); }
-
-    findMatch(next, (match) => {
-      if (!match) { return next.path(fallback); }
-      $history.push(match, next.pathname);
-      next.matchingPath = match.path;
-      next.params = match.getParams(next.pathname);
-
-      loadTemplate(match, (err, success) => {
-        if (err) { return console.error(err); }
-        if (!success) { return console.error('No template retrieved from templateUrl'); }
-        if (match.options.onLoad) { match.options.onLoad(utils.getRoot(), next); }
-      });
-    });
-  }
-}*/
-
 function findMatch(next, callback): void {
   for (let i = 0, ii = routes.length; i < ii; i++) {
     if (routes[i].matchRoute(next.pathname)) {
