@@ -1,11 +1,11 @@
+import LocationInterface from '../location/location.d';
 
 declare namespace RouteInterface {
   export interface RouteOptions {
-    templateUrl: string;
-    template: string;
+    templateUrl: string | void;
+    template: string | void;
     cache: boolean;
-    onLoad(callback: (location: Object) => void): void;
-    matchRoute(route: Object): void;
+    onLoad: (rootElement: Object, location: LocationInterface.NewLocation) => void;
   }
 
   export interface RouteProvider {
