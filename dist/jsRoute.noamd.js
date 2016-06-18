@@ -307,11 +307,26 @@
     }
 })(function (require, exports) {
     'use strict';
+    var RouteOptions = (function () {
+        function RouteOptions(options) {
+            this.templateUrl = null;
+            this.template = null;
+            this.cache = false;
+            this.partial = null;
+            this.onLoad = null;
+            this.templateUrl = options.templateUrl ? options.templateUrl : this.templateUrl;
+            this.template = options.template ? options.template : this.template;
+            this.cache = options.cache ? options.cache : this.cache;
+            this.partial = options.partial ? options.partial : this.partial;
+            this.onLoad = options.onLoad ? options.onLoad : this.onLoad;
+        }
+        return RouteOptions;
+    }());
     var Route = (function () {
         function Route(path, options) {
             this.cachedTemplate = null;
             this.path = path;
-            this.options = options;
+            this.options = new RouteOptions(options);
         }
         Route.prototype.matchRoute = function (nextPath) {
             var splitNext = nextPath.split('/');

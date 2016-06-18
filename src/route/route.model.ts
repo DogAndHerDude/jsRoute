@@ -1,6 +1,23 @@
 'use strict';
 
 import RouteInterface from '../typings/route/route.d';
+import LocationInterface from '../typings/location/location.d';
+
+class RouteOptions implements RouteInterface.RouteOptions {
+  public templateUrl: string | void = null;
+  public template: string | void = null;
+  public cache: boolean = false;
+  public partial: string | void = null;
+  public onLoad: (rootElement: Object, location: LocationInterface.NewLocation) => void | void = null;
+
+  constructor(options: RouteInterface.RouteOptions) {
+    this.templateUrl = options.templateUrl ? options.templateUrl : this.templateUrl;
+    this.template = options.template ? options.template : this.template;
+    this.cache = options.cache ? options.cache : this.cache;
+    this.partial = options.partial ? options.partial : this.partial;
+    this.onLoad = options.onLoad ? options.onLoad : this.onLoad;
+  }
+}
 
 class Route {
   public path: string;
@@ -9,7 +26,7 @@ class Route {
 
   constructor(path: string, options: RouteInterface.RouteOptions) {
     this.path = path;
-    this.options = options;
+    this.options = new RouteOptions(options);
   }
 
   public matchRoute(nextPath: string): boolean {
