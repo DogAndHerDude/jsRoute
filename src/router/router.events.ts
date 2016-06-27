@@ -47,6 +47,4 @@ function register() {
   interceptLinks();
 }
 
-export { register };
-export { startRouteChange, completeRouteChange, failRouteChange };
-export { onRun };
+export { startRouteChange, completeRouteChange, failRouteChange, register, onRun };

@@ -90,7 +90,7 @@ function addRoute(route): void {
 }
 
 function addFallback(redirectTo): void {
-  fallback = window.location.origin + redirectTo;
+  fallback = redirectTo;
 }
 
 function start(): void {
