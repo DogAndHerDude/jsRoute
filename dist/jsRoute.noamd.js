@@ -339,7 +339,7 @@
     }
     exports.addRoute = addRoute;
     function addFallback(redirectTo) {
-        fallback = window.location.origin + redirectTo;
+        fallback = redirectTo;
     }
     exports.addFallback = addFallback;
     function start() {
