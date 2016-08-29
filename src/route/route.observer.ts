@@ -1,7 +1,13 @@
 'use strict';
 
+/*
+ * Events should be moved onto router.events.ts
+ * This should be renamed to route handler of some sort, as it is not an observer
+ * Should contain methods refering to cechking routes
+ */
+
 import Route from './route.model';
-import { completeRouteChange, failRouteChange } from '../router/router.events';
+import { endRouteChange, routeChangeFail, routeChange } from '../router/router.events';
 import * as utils from '../utils/utils';
 import $http from '../http/http';
 import * as $history from '../history/history';
@@ -10,12 +16,7 @@ import { getCurrentLocation, setCurrentLocation, locationFactory } from '../loca
 var routes: Array<Route> = [];
 var defaultFallback = '/';
 
-function monitorRouteChange(): void {
-  let root = utils.getRoot();
-
-  root.addEventListener('routeChangeStart', startChange, false);
-}
-
+// Temp require declaration
 /*
  * Load template from specified url
  * Could potentiatially remove the http module and just replace it with require
@@ -63,6 +64,27 @@ function loadTemplate(route: Route, callback): void {
   }
 }
 
+/*
+ * Initiate route change
+ * Should invoke on routeChangeSuccess
+ * Currently it has logic to determine whether success or fail event will be fired
+ * The events should be delegated to another function
+ */
+
+/*function startChange() {
+  if (ev.defaultPrevented) { return; }
+
+  let routeList = ev.detail;
+  let prevLocation = getCurrentLocation();
+  let nextLocation = locationFactory(routeList.next.path);
+
+  if (prevLocation && (prevLocation.host !== nextLocation.host)) {
+    return window.location.assign(nextLocation.href);
+  }
+
+
+}*/
+
 function startChange(ev): void {
   if (ev.defaultPrevented) { return; }
 
@@ -75,9 +97,15 @@ function startChange(ev): void {
   }
 
   findMatch(nextLocation, (match) => {
-    if (!match) { return nextLocation.path(defaultFallback); }
+    //if (!match) { return nextLocation.path(defaultFallback); }
 
-    loadTemplate(match, (err, success) => {
+    // Create an error for route change
+    if (!match) { return routeChangeFail('No matcing route'); }
+
+    endRouteChange(null, match);
+
+    //completeRouteChange(routeList);
+    /*loadTemplate(match, (err, success) => {
       if (err) { return console.error(err); }
       if (!success) {
         routeList.err = 'Failed to retrieve template from templateUrl';
@@ -94,9 +122,26 @@ function startChange(ev): void {
       if (match.options.onLoad) { match.options.onLoad(utils.getRoot(), nextLocation); }
 
       completeRouteChange(routeList);
-    });
+    });*/
   });
 }
+
+/*function endChange(err, match): void {
+  if (err) {
+    return;
+  }
+
+  loadTemplate(match, (err, success) => {
+    if (err) { return console.error(err); }
+    if (!success) {
+
+    }
+  });
+}*/
+
+/*
+ * Attempts to find a match within registered route array
+ */
 
 function findMatch(next, callback): void {
   for (let i = 0, ii = routes.length; i < ii; i++) {
@@ -122,6 +167,4 @@ function start(): void {
   $history.monitorBrowserNavigation();
 }
 
-export { start };
-export { addRoute };
-export { addFallback };
+export { start, addRoute, addFallback };

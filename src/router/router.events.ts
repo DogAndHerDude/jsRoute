@@ -10,6 +10,7 @@
 import broadcastEvent from '../events/eventHandler';
 import { createRouteList } from '../location/location.factory';
 import * as utils from '../utils/utils';
+// import { endChange, failChange } from '../route/route.observer'
 
 /*
  * Initiate route change start even
@@ -41,11 +42,27 @@ function completeRouteChange(routeList): void {
  * default fallback route OR do nothing
  */
 
-function failRouteChange(routeList): void {
+function routeChangeFail(routeList): void {
   let root = utils.getRoot();
 
   broadcastEvent('routeChangeError', root, { detail: routeList });
 }
+
+function monitorRouteChange(): void {
+  let root = utils.getRoot();
+
+  root.addEventListener('routeChangeStart', startChange, false);
+}
+
+function routeChangeSuccess(match): void {
+
+}
+
+/*function endRouteChange(): void {
+  let root = utils.getRoot();
+
+  root.addEventListener('routeChangeStart', endChange, false);
+}*/
 
 /*
  * Start monitoring whether any link within the app view block has been clicked
@@ -75,9 +92,10 @@ function onRun() {
   let view = utils.getView();
 
   interceptLinkClicks();
+  monitorRouteChange();
 
   if (view.children.length) { return; }
   startRouteChange(window.location.pathname);
 }
 
-export { startRouteChange, completeRouteChange, failRouteChange, onRun };
+export { startRouteChange, completeRouteChange, routeChangeFail, onRun };
