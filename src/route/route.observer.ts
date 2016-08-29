@@ -7,7 +7,7 @@
  */
 
 import Route from './route.model';
-import { endRouteChange, routeChangeFail, routeChange } from '../router/router.events';
+import { completeRouteChange } from '../router/router.events';
 import * as utils from '../utils/utils';
 import $http from '../http/http';
 import * as $history from '../history/history';
@@ -15,6 +15,7 @@ import { getCurrentLocation, setCurrentLocation, locationFactory } from '../loca
 
 var routes: Array<Route> = [];
 var defaultFallback = '/';
+var matchedRoute: Route | void = null;
 
 // Temp require declaration
 /*
@@ -36,8 +37,8 @@ function loadTemplate(route: Route, callback): void {
     // Why isn't it there by default?
     // Who thought this was a good idea?
 
-    let tmpl = require(route.options.templateUrl);
-    console.log(tmpl);
+    /*let tmpl = require(route.options.templateUrl);
+    console.log(tmpl);*/
     $http.get(route.options.templateUrl, (err, data) => {
 
       /*
@@ -71,20 +72,6 @@ function loadTemplate(route: Route, callback): void {
  * The events should be delegated to another function
  */
 
-/*function startChange() {
-  if (ev.defaultPrevented) { return; }
-
-  let routeList = ev.detail;
-  let prevLocation = getCurrentLocation();
-  let nextLocation = locationFactory(routeList.next.path);
-
-  if (prevLocation && (prevLocation.host !== nextLocation.host)) {
-    return window.location.assign(nextLocation.href);
-  }
-
-
-}*/
-
 function startChange(ev): void {
   if (ev.defaultPrevented) { return; }
 
@@ -97,47 +84,54 @@ function startChange(ev): void {
   }
 
   findMatch(nextLocation, (match) => {
-    //if (!match) { return nextLocation.path(defaultFallback); }
-
     // Create an error for route change
-    if (!match) { return routeChangeFail('No matcing route'); }
+    if (!match) { /*return routeChangeFail('No matcing route');*/ }
 
-    endRouteChange(null, match);
+    matchedRoute = match;
 
-    //completeRouteChange(routeList);
-    /*loadTemplate(match, (err, success) => {
-      if (err) { return console.error(err); }
-      if (!success) {
-        routeList.err = 'Failed to retrieve template from templateUrl';
-        failRouteChange(routeList);
-        return console.error(routeList.err);
-      }
+    /*
+     * Should not give this much information to the router
+     * Should just only keep previous/next route info
+     */
 
-      nextLocation.matchingPath = routeList.next.match = match.path;
-      nextLocation.params = match.getParams(nextLocation.pathname);
 
-      $history.push(match, nextLocation.pathname);
-      setCurrentLocation(nextLocation);
+    nextLocation.matchingPath = routeList.next.match = match.path;
+    nextLocation.params = match.getParams;
 
-      if (match.options.onLoad) { match.options.onLoad(utils.getRoot(), nextLocation); }
+    /*
+     * Need to change routeList to link to prev/next obj instead
+     */
 
-      completeRouteChange(routeList);
-    });*/
+    console.log(routeList);
+
+    completeRouteChange(match, routeList, nextLocation);
   });
 }
 
-/*function endChange(err, match): void {
-  if (err) {
-    return;
-  }
+/*
+ * Should instead load matching route and next/prev location from location
+ */
+
+function endChange(ev): void {
+  let match = ev.detail.match;
+  let routeList = ev.detail.routeList;
+  let nextLocation = ev.detail.nextLocation;
+
+  $history.push(match, nextLocation.pathname);
+  setCurrentLocation(nextLocation);
 
   loadTemplate(match, (err, success) => {
     if (err) { return console.error(err); }
     if (!success) {
+      routeList.err = 'Failed to retrieve templatefrom template URL';
+      return console.error(routeList.err);
+    }
 
+    if (match.options.onLoad) {
+      match.options.onLoad(utils.getRoot(), nextLocation);
     }
   });
-}*/
+}
 
 /*
  * Attempts to find a match within registered route array
@@ -163,8 +157,7 @@ function addFallback(redirectTo): void {
 }
 
 function start(): void {
-  monitorRouteChange();
   $history.monitorBrowserNavigation();
 }
 
-export { start, addRoute, addFallback };
+export { start, addRoute, addFallback, startChange, endChange };

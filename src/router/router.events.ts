@@ -10,7 +10,7 @@
 import broadcastEvent from '../events/eventHandler';
 import { createRouteList } from '../location/location.factory';
 import * as utils from '../utils/utils';
-// import { endChange, failChange } from '../route/route.observer'
+import { startChange, endChange } from '../route/route.observer';
 
 /*
  * Initiate route change start even
@@ -30,10 +30,10 @@ function startRouteChange(url: string): void {
  * And only change the route within the routeChangeSuccess listen block
  */
 
-function completeRouteChange(routeList): void {
+function completeRouteChange(match, routeList, nextLocation): void {
   let root = utils.getRoot();
 
-  broadcastEvent('routeChangeSuccess', root, { detail: routeList });
+  broadcastEvent('routeChangeSuccess', root, { detail: { match, routeList, nextLocation } });
 }
 
 /*
@@ -54,9 +54,17 @@ function monitorRouteChange(): void {
   root.addEventListener('routeChangeStart', startChange, false);
 }
 
-function routeChangeSuccess(match): void {
+function monitorRouteChangeSuccss(): void {
+  let root = utils.getRoot();
 
+  root.addEventListener('routeChangeSuccess', endChange, false);
 }
+
+/*function failRouteChange(): void {
+  let root = utils.getRoot();
+
+  root.addEventListener('routeChangeFail', failChange, false);
+}*/
 
 /*function endRouteChange(): void {
   let root = utils.getRoot();
@@ -93,6 +101,7 @@ function onRun() {
 
   interceptLinkClicks();
   monitorRouteChange();
+  monitorRouteChangeSuccss();
 
   if (view.children.length) { return; }
   startRouteChange(window.location.pathname);
