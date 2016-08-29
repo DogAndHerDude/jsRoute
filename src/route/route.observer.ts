@@ -16,12 +16,36 @@ function monitorRouteChange(): void {
   root.addEventListener('routeChangeStart', startChange, false);
 }
 
+/*
+ * Load template from specified url
+ * Could potentiatially remove the http module and just replace it with require
+ * Before loading template, determine whether the template has been cached
+ * In the case that it has been, load the cached version instead
+ * Should add a way to clear cache
+ */
+
 function loadTemplate(route: Route, callback): void {
   const cachedTemplate = route.getCachedTemplate();
   let view = utils.getView();
 
   if (!cachedTemplate) {
+
+    // Testing require
+    // Missing require declaration in typescript
+    // Why isn't it there by default?
+    // Who thought this was a good idea?
+
+    let tmpl = require(route.options.templateUrl);
+    console.log(tmpl);
     $http.get(route.options.templateUrl, (err, data) => {
+
+      /*
+       * Should escape dangerous strings
+       * Alternatively provide a way to inject middleware into it
+       * Middleware could be event driven
+       * Perhaps too much hassle
+       */
+
       if (err) { return callback(err); }
       if (!data) { return callback(); }
 

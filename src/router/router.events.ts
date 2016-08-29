@@ -60,10 +60,6 @@ function interceptLinkClicks(): void {
     if (ev.target.nodeName === 'A') {
       ev.preventDefault();
 
-      /*
-       *
-       */
-
       startRouteChange(ev.target.href);
     }
   });
