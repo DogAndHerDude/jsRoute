@@ -15,8 +15,7 @@ class Router {
 
   public config(callback: (routeProvider: RouteInterface.RouteProvider) => void): void {
     callback(routeProvider);
-
-    events.register();
+    
     observer.start();
     events.onRun();
   }

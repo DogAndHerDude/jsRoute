@@ -8,7 +8,7 @@ import * as $history from '../history/history';
 import { getCurrentLocation, setCurrentLocation, locationFactory } from '../location/location.factory';
 
 var routes: Array<Route> = [];
-var fallback = '/';
+var defaultFallback = '/';
 
 function monitorRouteChange(): void {
   let root = utils.getRoot();
@@ -18,7 +18,7 @@ function monitorRouteChange(): void {
 
 function loadTemplate(route: Route, callback): void {
   const cachedTemplate = route.getCachedTemplate();
-  var view = utils.getView();
+  let view = utils.getView();
 
   if (!cachedTemplate) {
     $http.get(route.options.templateUrl, (err, data) => {
@@ -51,7 +51,7 @@ function startChange(ev): void {
   }
 
   findMatch(nextLocation, (match) => {
-    if (!match) { return nextLocation.path(fallback); }
+    if (!match) { return nextLocation.path(defaultFallback); }
 
     loadTemplate(match, (err, success) => {
       if (err) { return console.error(err); }
@@ -77,7 +77,7 @@ function startChange(ev): void {
 function findMatch(next, callback): void {
   for (let i = 0, ii = routes.length; i < ii; i++) {
     if (routes[i].matchRoute(next.pathname)) {
-        return callback(routes[i]);
+      return callback(routes[i]);
     }
   }
 
@@ -90,7 +90,7 @@ function addRoute(route): void {
 }
 
 function addFallback(redirectTo): void {
-  fallback = redirectTo;
+  defaultFallback = redirectTo;
 }
 
 function start(): void {
